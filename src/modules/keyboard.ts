@@ -80,18 +80,22 @@ export default class keyboard extends Keyboard {
   }
 
   addBindings() {
-    this.addBinding({
-      key: "backspace",
-      shiftKey: null,
-      handler: function () {
+    this.bindings[8].unshift({
+      //backspace
+      key: 8,
+      ctrlKey: null,
+      handler: function (range: QuillRange, context: QuillContext) {
         this.newSentence = false;
+        console.log("⌨ BACKSPACE - revert 'new sentence'");
         return true;
       },
     });
 
     this.bindings[13].unshift({
+      //enter
       key: 13,
       handler: function (range: QuillRange, context: QuillContext) {
+        console.log("⌨ ENTER - New sentence");
         const shortform = this.getPreviousWord(context.prefix);
         let phrase = expandShortform(this.cache, shortform);
         if (phrase == "") return true;
@@ -100,10 +104,10 @@ export default class keyboard extends Keyboard {
           .delete(shortform.length)
           .insert(phrase);
         this.quill.updateContents(delta);
-        this.quill.InsertText(range.index, "\n");
+        this.quill.insertText(range.index + phrase.length, "\n");
+        this.quill.setSelection(range.index + phrase.length + 1);
         this.newSentence = true;
         return false;
-        // console.log("⌨ ENTER - New sentence");
       },
     });
 
