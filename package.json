@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear"
+    "start": "sirv public --no-clear",
+    "update": "npx npm-check-updates"
   },
   "devDependencies": {
     "@nightwatch/mobile-helper": "^0.1.12",
@@ -32,8 +33,8 @@
   },
   "dependencies": {
     "dexie": "^4.0.1-beta.6",
+    "quill": "^1.3.7",
     "sirv-cli": "^2.0.0",
-    "svelte-quill": "^1.2.0",
     "types-quill-delta": "*"
   }
 }
