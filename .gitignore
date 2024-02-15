@@ -1,5 +1,7 @@
 /node_modules/
 /public/build/
+/logs/
+/tests_output/
 
 .DS_Store
 .env*
