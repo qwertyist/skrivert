@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
+  import "../quill.css";
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
@@ -12,7 +13,7 @@
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar>
+		<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
 			<svelte:fragment slot="lead">
 				<a
 					class="btn btn-sm variant-ghost-surface"
@@ -28,7 +29,15 @@
 				>
 				  Mottagarvy
 				</a>
+				<a
+					class="btn btn-sm variant-ghost-surface"
+					href="#"
+					rel="noreferrer"
+          >
+          Något annat
+        </a>
 			</svelte:fragment>
+      SKRIVERT
 			<svelte:fragment slot="trail">
 				<a
 					class="btn btn-sm variant-ghost-surface"
