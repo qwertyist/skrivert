@@ -2,6 +2,7 @@
 /public/build/
 /logs/
 /tests_output/
+/.svelte-kit/
 
 .DS_Store
 .env*
