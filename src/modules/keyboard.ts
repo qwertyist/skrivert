@@ -98,8 +98,10 @@ export default class keyboard extends Keyboard {
     this.bindings[13].unshift({
       //enter
       key: 13,
+      shiftKey: false,
       handler: function (range: QuillRange, context: QuillContext) {
         console.log("⌨ ENTER - New sentence");
+        this.newSentence = true;
         const shortform = this.getPreviousWord(context.prefix);
         let phrase = expandShortform(this.cache, shortform);
         if (phrase == "") return true;
@@ -110,7 +112,26 @@ export default class keyboard extends Keyboard {
         this.quill.updateContents(delta);
         this.quill.insertText(range.index + phrase.length, "\n");
         this.quill.setSelection(range.index + phrase.length + 1);
-        this.newSentence = true;
+        return false;
+      },
+    });
+    this.addBinding({
+      //shift+enter
+      key: 13,
+      shiftKey: true,
+      handler: function (range: QuillRange, context: QuillContext) {
+        console.log("⌨ SHIFT+ENTER - New line");
+        this.newSentence = false;
+        const shortform = this.getPreviousWord(context.prefix);
+        let phrase = expandShortform(this.cache, shortform);
+        if (phrase == "") return true;
+        let delta = new Delta()
+          .retain(range.index - shortform.length)
+          .delete(shortform.length)
+          .insert(phrase);
+        this.quill.updateContents(delta);
+        this.quill.insertText(range.index + phrase.length, "\n");
+        this.quill.setSelection(range.index + phrase.length + 1);
         return false;
       },
     });
