@@ -5,7 +5,7 @@ function dummy_function(params: any, symbol: string): boolean {
   return false;
 }
 
-function clear_textContents(params: any, symbol: string): boolean {
+function clearText(params: any, symbol: string): boolean {
   params.quill.setContents("");
 }
 
@@ -58,7 +58,7 @@ export const defaultHotkeys: Array<HotkeyType> = [
   {
     symbol: "F4",
     key: { keyCode: 115, shiftKey: false, ctrlKey: false },
-    action: dummy_function,
+    action: clearText,
   },
   {
     symbol: "Shift+F4",

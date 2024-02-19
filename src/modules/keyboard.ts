@@ -63,7 +63,10 @@ export default class keyboard extends Keyboard {
   listen() {
     document.addEventListener("keydown", (e) => {
       if (e.key.length == 1) {
-        if (e.key.match(/\p{L}/gu) && this.newSentence) {
+        if (
+          (e.key.match(/\p{L}/gu) && this.newSentence) ||
+          this.quill.getLength() == 1
+        ) {
           e.preventDefault();
           const index = this.quill.getSelection().index;
           this.quill.insertText(index, e.key.toUpperCase());
