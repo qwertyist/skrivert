@@ -1,4 +1,5 @@
 import type { ShortformExportType } from "./index.d.ts";
+import default_shortforms from "../data/shortforms.se.json";
 export function cacheShortforms(lists: Array<string>) {
   let shortforms = new Map();
   console.log("Caching shortforms with lists:", lists);
@@ -7,21 +8,14 @@ export function cacheShortforms(lists: Array<string>) {
   var shortforms_length = 0;
   var phrases_length = 0;
   if (lists.length < 1) {
-    fetch("data/shortforms.se.json")
-      .then((response) => response.json())
-      .then((json) => {
-        json.map((sf: ShortformExportType) => {
-          n += 1;
-          shortforms_length += sf.sf.length;
-          phrases_length += sf.p.length;
-          shortforms.set(sf.sf, { phrase: sf.p, last: sf.u });
-        });
-        console.log("Average shortform length:", shortforms_length / n);
-        console.log("Average phrases length:", phrases_length / n);
-      })
-      .catch((err) => {
-        console.error("❌ Caching shortforms from global list failed:", err);
-      });
+    default_shortforms.map((sf: ShortformExportType) => {
+      n += 1;
+      shortforms_length += sf.sf.length;
+      phrases_length += sf.p.length;
+      shortforms.set(sf.sf, { phrase: sf.p, last: sf.u });
+    });
+    console.log("Average shortform length:", shortforms_length / n);
+    console.log("Average phrases length:", phrases_length / n);
   }
   return shortforms;
 }

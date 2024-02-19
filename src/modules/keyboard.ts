@@ -1,6 +1,7 @@
 import Quill from "quill";
 const Delta = Quill.import("delta");
 const Keyboard = Quill.import("modules/keyboard");
+import { defaultHotkeys } from "./hotkeys";
 import { cacheShortforms, expandShortform } from "./shortforms";
 import type {
   ExpanderType,
@@ -86,7 +87,7 @@ export default class keyboard extends Keyboard {
       ctrlKey: null,
       handler: function (range: QuillRange, context: QuillContext) {
         this.newSentence = false;
-        console.log("⌨ BACKSPACE - revert 'new sentence'");
+        // console.log("⌨ BACKSPACE - revert 'new sentence'");
         return true;
       },
     });
@@ -112,7 +113,7 @@ export default class keyboard extends Keyboard {
     });
 
     defaultExpanders.forEach((expander) => {
-      console.log(expander.key);
+      //console.log(expander.key);
       this.addBinding({
         key: expander.key.keyCode,
         shiftKey: expander.key.shiftKey,
@@ -138,6 +139,17 @@ export default class keyboard extends Keyboard {
       },
     });
 
+    defaultHotkeys.forEach((hk) => {
+      this.addBinding({
+        key: hk.key.keyCode,
+        shiftKey: hk.key.shiftKey,
+        ctrlKey: hk.key.ctrlKey,
+        handler: function (range: QuillRange, context: QuillContext) {
+          const quill = this.quill;
+          return hk.action({ quill, range, context }, hk.symbol);
+        },
+      });
+    });
     this.addBinding({
       key: 115,
       shiftKey: null,

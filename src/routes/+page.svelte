@@ -10,9 +10,14 @@
 
   onMount(async () => {
     const { default: Quill }= await import("quill");
+    const { default: Keyboard } = await import("../modules/keyboard.js");
+    Quill.register("modules/keyboard", Keyboard, true)
     skrivert = new Quill(node, {
       modules: {
-        toolbar: []
+        toolbar: [],
+        keyboard: {
+          listIds: []
+        }
       },
       themes: "snow",
       ...options
@@ -24,7 +29,7 @@
 </script>
 
 <div class="container mx-auto h-full flex items-center" on:click={handleClick}>
-  <div class="editor" bind:this={node} />
+  <div class="editor" spellcheck=false bind:this={node} />
 </div>
 
 <style lang="postcss">

@@ -18,11 +18,18 @@ export type ShortformExportType = {
 
 type KeyType = {
   keyCode: number;
-  shiftKey: boolean;
+  shiftKey?: boolean;
+  ctrlKey?: boolean;
 };
 
 export type ExpanderType = {
   key: KeyType;
   symbol: string;
   fullstop: boolean;
+};
+
+type HotkeyType = {
+  key: KeyType;
+  symbol: string;
+  action(params: any, symbol: string): boolean;
 };
