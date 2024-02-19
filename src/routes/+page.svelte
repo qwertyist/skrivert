@@ -28,25 +28,12 @@
   };
 </script>
 
-<div class="container mx-auto h-full flex items-center" on:click={handleClick}>
+<div class="container mx-auto h-full w-full flex" on:click={handleClick}>
   <div class="editor" spellcheck=false bind:this={node} />
 </div>
 
 <style lang="postcss">
-	main {
-		padding: 1em;
-		margin: 0 auto;
-    height: 100vh;
-	}
-
   .editor {
     max-height: 90%;
   }
-
-  .ql-editor {
-    border: 1px solid #f00;
-    width: 100%;
-    height: 100%;
-  }
-
 </style>
