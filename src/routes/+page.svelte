@@ -28,7 +28,7 @@
   };
 </script>
 
-<div class="container mx-auto h-full w-full flex" on:click={handleClick}>
+<div class="container mx-auto h-full w-full" on:click={handleClick}>
   <div class="editor" spellcheck=false bind:this={node} />
 </div>
 
