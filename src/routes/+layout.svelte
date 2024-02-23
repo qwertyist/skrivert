@@ -5,8 +5,8 @@
   import { Button } from "$lib/components/ui/button";
 </script>
 
-<div>
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+<div class="h-[calc(100vh-78px)]">
+  <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div>
       <Button>Texta</Button>
       <Button>Ändra</Button>
@@ -18,5 +18,7 @@
       <Button>Sluta</Button>
     </div>
   </div>
-  <slot />
+  <div class="h-full">
+      <slot />
+  </div>
 </div>
