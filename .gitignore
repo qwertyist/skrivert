@@ -3,6 +3,7 @@
 /logs/
 /tests_output/
 /.svelte-kit/
+/coverage/
 
 .DS_Store
 .env*
