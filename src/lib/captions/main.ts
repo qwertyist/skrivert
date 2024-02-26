@@ -26,10 +26,22 @@ export function parser(options: parserOptions, text: string): captionType {
     while (buffer.length > 0) {
         block.lines = buffer.slice(0, options.lines) 
         buffer = buffer.slice(options.lines)
+        if (block.lines.length > 0) {
+            if (buffer.length > 0) {
+                let last = block.lines.pop() || ""
+                if (".,!?".indexOf(last.charAt(last.length-1)) == -1) {
+                    last += "-"
+                    block.lines.push(last)
+                    buffer[0] = "-" + buffer[0]
+                }
+            }
+            blocks.push({...block})
+        }
+        block.lines = []
     }
 
     const captions: captionType= {
-        blocks: [block]
+        blocks: blocks
     }
     return captions
 }
