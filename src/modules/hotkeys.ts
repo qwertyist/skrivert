@@ -6,7 +6,8 @@ function dummy_function(params: any, symbol: string): boolean {
 }
 
 function clearText(params: any, symbol: string): boolean {
-  params.quill.setContents("");
+    console.log("clear text")
+    return false
 }
 
 export const defaultHotkeys: Array<HotkeyType> = [

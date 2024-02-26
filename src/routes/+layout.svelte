@@ -1,7 +1,6 @@
 <script lang="ts">
   import "../app.pcss";
   import "../app.postcss";
-  import "../quill.css";
   import { Button } from "$lib/components/ui/button";
 </script>
 
