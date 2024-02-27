@@ -1,6 +1,6 @@
 import type { ShortformExportType } from "./index.d.ts";
 import default_shortforms from "../data/shortforms.se.json";
-export function cacheShortforms(lists: Array<string>) {
+export function cacheShortforms(lists: Array<string> = []) {
   let shortforms = new Map();
   console.log("Caching shortforms with lists:", lists);
 

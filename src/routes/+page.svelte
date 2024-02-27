@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { parser } from "$lib/captions/main"
   import { getCurrentWord } from "$lib/textarea/main"
+  import { cacheShortforms, expandShortform } from "../modules/shortforms"
   const parserOptions= {
     lines: 2,
     chars: 37
@@ -12,11 +13,15 @@
   let textarea = null;
   onMount(() => {
     textarea = document.getElementById("doc");
+    textarea.focus();
 	});
   let text: string = "";
   let captions: string;
   let currentWord: string = "";
   let beforeInputEvent: any = {}
+  let expandedPhrase: string = "";
+
+  const shortforms = cacheShortforms()
 
   function renderCaptions(content) {
     captions = "";
@@ -26,6 +31,7 @@
       captions += "\n\n"
     })
   }
+
   function updateBuffer() {
     buffer[0] = text;
     buffer.forEach(line => { 
@@ -33,14 +39,21 @@
     })
       
   }
+
   function input(e) {
     beforeInputEvent = e.inputType + " ("+e.data+")";
     if(e.inputType == "insertText") {
-      console.log("Insert Text", e.data)
+      // console.log("Insert Text", e.data)
       switch(e.data) {
         case " ": {
+          currentWord = getCurrentWord(textarea).trim();
+          if(shortforms.has(currentWord)) {
+            expandedPhrase = expandShortform(shortforms, currentWord);
+          } else {
+            expandedPhrase = "";
+          }
+
           updateBuffer()
-          currentWord = getCurrentWord(textarea)
           break
         }
       }
@@ -58,9 +71,13 @@
       </div>
 
       <div> 
-        <span class="debug">currentword: {currentWord}</span><br />
-        <span class="debug">beforeinput: {beforeInputEvent}</span><br />
-        <span class="debug">buffer: {buffer}</span><br />
+        <pre>
+<span class="debug">currentword: {currentWord.length} {currentWord}</span><br />
+<span class="debug">expanded: {expandedPhrase}</span><br />
+
+<span class="debug">beforeinput: {beforeInputEvent}</span><br />
+<span class="debug">buffer: {buffer}</span><br />
+        </pre>
         <textarea class="captions" cols=80 rows=4 bind:value={captions} />
       </div>
     </div>
@@ -84,5 +101,7 @@
     padding: 1em;
     resize: none;
     width: 100%;
+  }
+  .debug {
   }
 </style>
