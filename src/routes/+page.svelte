@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { parser } from "$lib/captions/main"
+  import { getCurrentWord } from "$lib/textarea/main"
   const parserOptions= {
     lines: 2,
     chars: 37
@@ -7,9 +9,15 @@
   let buffer = [
     { line: 1, content: "",}
   ]
+  let textarea = null;
+  onMount(() => {
+    textarea = document.getElementById("doc");
+	});
   let text: string = "";
   let captions: string;
+  let currentWord: string = "";
   let beforeInputEvent: any = {}
+
   function renderCaptions(content) {
     captions = "";
     const parsed = parser(parserOptions, content)
@@ -32,6 +40,7 @@
       switch(e.data) {
         case " ": {
           updateBuffer()
+          currentWord = getCurrentWord(textarea)
           break
         }
       }
@@ -45,10 +54,11 @@
 <div class="h-full w-full">
     <div class="h-full gap-4 grid grid-cols-2">
       <div class="docContainer" id="docContainer" on:beforeinput={input}>
-        <textarea bind:value={text}/>
+        <textarea id="doc" bind:value={text}/>
       </div>
 
       <div> 
+        <span class="debug">currentword: {currentWord}</span><br />
         <span class="debug">beforeinput: {beforeInputEvent}</span><br />
         <span class="debug">buffer: {buffer}</span><br />
         <textarea class="captions" cols=80 rows=4 bind:value={captions} />
