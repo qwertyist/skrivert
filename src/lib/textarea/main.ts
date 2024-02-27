@@ -1,3 +1,12 @@
+/* 
+  const insertText = (textarea, text) => {
+    const position = textarea.selectionStart;
+    const before = textarea.value.substring(0, position);
+    const after = textarea.value.substring(position, textarea.value.length);
+    textarea.value = before + text + after;
+    textarea.selectionStart = textarea.selectionEnd = position + text.length;
+  };
+*/
 export const insertText = (textarea, text) => {
   const start = textarea.selectionStart;
   const end = textarea.selectionStart + text.length;
@@ -10,7 +19,6 @@ export const insertExpandedPhrase = (textarea, expander, len, text) => {
 };
 
 const findIndexOfCurrentWord = (textarea) => {
-  // Get current value and cursor position
   const currentValue = textarea.value;
   const cursorPos = textarea.selectionStart;
 
