@@ -42,6 +42,12 @@
       
   }
 
+  function hotkeyHandler(e) {
+    if(e.keyCode == 115) {
+      textarea.value = "";
+    }
+  }
+
   function expand(e) {
     const expander = e.data;
     console.log("expander:", expander)
@@ -82,7 +88,7 @@
 </script>
 
 
-<div class="h-full w-full">
+<div class="h-full w-full" on:keyup={hotkeyHandler}>
     <div class="h-full gap-4 grid grid-cols-2">
       <div class="docContainer" id="docContainer" on:keyup={change} on:beforeinput={input}>
         <textarea id="doc" bind:value={text}/>
