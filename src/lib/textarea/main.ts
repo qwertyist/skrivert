@@ -16,4 +16,4 @@ export const getCurrentWord = (textarea) => {
   const cursorPos = textarea.selectionStart;
   const startIndex = findIndexOfCurrentWord(textarea);
   return currentValue.substring(startIndex + 1, cursorPos);
-}
+};

@@ -1,9 +1,6 @@
 import { defaultHotkeys } from "./hotkeys";
 import { cacheShortforms, expandShortform } from "./shortforms";
-import type {
-  ExpanderType,
-  KeyboardOptions,
-} from "./index.d.ts";
+import type { ExpanderType, KeyboardOptions } from "./index.d.ts";
 
 const defaultExpanders: Array<ExpanderType> = [
   { key: { keyCode: 190, shiftKey: false }, symbol: ".", fullstop: true },
@@ -22,5 +19,5 @@ const defaultExpanders: Array<ExpanderType> = [
 ];
 
 function getPreviousWord(prefix: String) {
-    return prefix.split(/[\u200B\s-.,:;_!?\/"'()]/).pop() || "";
+  return prefix.split(/[\u200B\s-.,:;_!?\/"'()]/).pop() || "";
 }
