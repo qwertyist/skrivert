@@ -8,6 +8,7 @@ export const insertExpandedPhrase = (textarea, expander, len, text) => {
   const end = textarea.selectionStart;
   textarea.setRangeText(text.concat(expander), start, end, "end");
 };
+
 const findIndexOfCurrentWord = (textarea) => {
   // Get current value and cursor position
   const currentValue = textarea.value;
@@ -15,7 +16,8 @@ const findIndexOfCurrentWord = (textarea) => {
 
   // Iterate backwards through characters until we find a space or newline character
   let startIndex = cursorPos - 1;
-  while (startIndex >= 0 && !/\s/.test(currentValue[startIndex])) {
+  while (startIndex >= 0 && /\p{Letter}|\p{Number}/u.test(currentValue[startIndex])) {
+    console.log(currentValue[startIndex])
     startIndex--;
   }
   return startIndex;
