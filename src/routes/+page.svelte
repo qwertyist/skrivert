@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { parser } from "$lib/captions/main"
-  import { getCurrentWord } from "$lib/textarea/main"
+  import { getCurrentWord, insertExpandedPhrase } from "$lib/textarea/main"
   import { cacheShortforms, expandShortform } from "../modules/shortforms"
   const parserOptions= {
     lines: 2,
@@ -47,12 +47,9 @@
       switch(e.data) {
         case " ": {
           currentWord = getCurrentWord(textarea).trim();
-          if(shortforms.has(currentWord)) {
-            expandedPhrase = expandShortform(shortforms, currentWord);
-          } else {
-            expandedPhrase = "";
-          }
-
+          expandedPhrase = expandShortform(shortforms, currentWord);
+          insertExpandedPhrase(textarea, " ", currentWord.length, expandedPhrase) 
+          e.preventDefault();
           updateBuffer()
           break
         }

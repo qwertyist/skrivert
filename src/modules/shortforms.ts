@@ -25,6 +25,7 @@ export function expandShortform(
   ShortForm: string,
 ): string {
   const u = new Date();
+  console.log("ShortForm", ShortForm);
   const shortform = ShortForm.toLowerCase();
   if (cache.has(shortform)) {
     const phrase = cache.get(shortform).phrase;

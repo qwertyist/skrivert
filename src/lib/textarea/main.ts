@@ -1,3 +1,8 @@
+export const insertExpandedPhrase = (textarea, expander, len, text) => {
+  const start = textarea.selectionStart - len;
+  const end = textarea.selectionStart;
+  textarea.setRangeText(text.concat(expander), start, end, "end");
+};
 const findIndexOfCurrentWord = (textarea) => {
   // Get current value and cursor position
   const currentValue = textarea.value;
