@@ -39,7 +39,6 @@
     buffer.forEach(line => { 
       renderCaptions(line);
     })
-      
   }
 
   function hotkeyHandler(e) {
@@ -90,11 +89,14 @@
 
 <div class="h-full w-full" on:keyup={hotkeyHandler}>
     <div class="h-full gap-4 grid grid-cols-2">
-      <div class="docContainer" id="docContainer" on:keyup={change} on:beforeinput={input}>
-        <textarea id="doc" bind:value={text}/>
+      <div>
+        <div class="docContainer" id="docContainer" on:keyup={change} on:beforeinput={input}>
+          <textarea id="doc" rows=4 bind:value={text}/>
+        </div>
       </div>
 
       <div> 
+        <textarea class="captions" cols=80 rows=4 bind:value={captions} />
         <pre>
 <span class="debug">currentword: {currentWord.length} {currentWord}</span><br />
 <span class="debug">expanded: {expandedPhrase}</span><br />
@@ -103,7 +105,6 @@
 <span class="debug">beforeinput: {beforeInputEvent}</span><br />
 <span class="debug">buffer: {buffer}</span><br />
         </pre>
-        <textarea class="captions" cols=80 rows=4 bind:value={captions} />
       </div>
     </div>
 </div>
@@ -111,12 +112,10 @@
 <style lang="postcss">
   .docContainer {
     width: 100%;
-    height: 100%;
   }
   .docContainer textarea {
     width: 100%;
-    height: 100%;
-    color: red;
+    color: black;
     padding: 1em;
     resize: none;
   }

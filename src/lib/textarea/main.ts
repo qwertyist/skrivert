@@ -24,8 +24,11 @@ const findIndexOfCurrentWord = (textarea) => {
 
   // Iterate backwards through characters until we find a space or newline character
   let startIndex = cursorPos - 1;
-  while (startIndex >= 0 && /\p{Letter}|\p{Number}/u.test(currentValue[startIndex])) {
-    console.log(currentValue[startIndex])
+  while (
+    startIndex >= 0 &&
+    /\p{Letter}|\p{Number}/u.test(currentValue[startIndex])
+  ) {
+    console.log(currentValue[startIndex]);
     startIndex--;
   }
   return startIndex;
