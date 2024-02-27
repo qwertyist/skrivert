@@ -1,3 +1,8 @@
+export const insertText = (textarea, text) => {
+  const start = textarea.selectionStart;
+  const end = textarea.selectionStart + text.length;
+  textarea.setRangeText(text, start, end, "end");
+};
 export const insertExpandedPhrase = (textarea, expander, len, text) => {
   const start = textarea.selectionStart - len;
   const end = textarea.selectionStart;
