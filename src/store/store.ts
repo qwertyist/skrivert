@@ -14,3 +14,7 @@ export const textSettingsStore = writable({
 });
 
 export const sessionSettingsStore = writable();
+
+export const shortformsStore = writable();
+
+// export const documentsStore = writable();

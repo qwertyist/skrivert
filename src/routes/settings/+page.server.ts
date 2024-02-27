@@ -3,6 +3,7 @@ import { fail } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { addShortformSchema } from "./schema";
 import { zod } from "sveltekit-superforms/adapters";
+import { db } from "../../db";
 
 export const load: PageServerLoad = async () => {
   return {

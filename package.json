@@ -51,6 +51,7 @@
   "dependencies": {
     "bits-ui": "^0.18.3",
     "clsx": "^2.1.0",
+    "dexie": "^4.0.1-beta.11",
     "formsnap": "^0.5.1",
     "radix-icons-svelte": "^1.2.1",
     "tailwind-merge": "^2.2.1",
