@@ -4,10 +4,11 @@ import { superValidate } from "sveltekit-superforms";
 import { addShortformSchema } from "./schema";
 import { zod } from "sveltekit-superforms/adapters";
 
-export const load: PageServerLoad = async() => {
-return {
-  form: await superValidate(zod(addShortformSchema))
-}}
+export const load: PageServerLoad = async () => {
+  return {
+    form: await superValidate(zod(addShortformSchema)),
+  };
+};
 
 export const actions: Actions = {
   default: async (event) => {
