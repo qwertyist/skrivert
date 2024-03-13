@@ -11,7 +11,7 @@
   let buffer = [
     { line: 1, content: "",}
   ]
-  let textarea = null;
+  let textarea: any = null;
   let capitalizeNext = true;
   onMount(() => {
     textarea = document.getElementById("doc");
@@ -25,7 +25,7 @@
 
   const shortforms = cacheShortforms()
 
-  function renderCaptions(content) {
+  function renderCaptions(content: string) {
     captions = "";
     const parsed = parser(parserOptions, content)
     parsed.blocks.forEach(block => {
@@ -35,23 +35,23 @@
   }
 
   function updateBuffer() {
-    buffer[0] = text;
+    buffer[0] = {line: 0, content: text};
     buffer.forEach(line => { 
-      renderCaptions(line);
+      renderCaptions(line.content);
     })
   }
 
-  function hotkeyHandler(e) {
+function hotkeyHandler(e: KeyboardEvent) {
     if(e.keyCode == 115) {
       textarea.value = "";
     }
   }
 
-  function expand(e) {
-    const expander = e.data;
+  function expand(e: InputEvent) {
+    const expander = e.data as string;
     console.log("expander:", expander)
     if(defaultExpanders.has(expander)) {
-      const expanderRules = defaultExpanders.get(expander)
+      const expanderRules = defaultExpanders.get(expander)!
       currentWord = getCurrentWord(textarea).trim();
       expandedPhrase = expandShortform(shortforms, currentWord);
       if(expanderRules.fullstop) { 
@@ -69,11 +69,13 @@
       capitalizeNext = true;
     }
   }
-  function input(e) {
+
+  function input(e: InputEvent) {
     beforeInputEvent = e.inputType + " ("+e.data+")";
     if(e.inputType == "insertText") {
-      if(capitalizeNext && !defaultExpanders.has(e.data)) {
-        insertText(textarea, e.data.toUpperCase()) 
+      const key = e.data || ""
+      if(capitalizeNext && !defaultExpanders.has(key)) {
+        insertText(textarea, key.toUpperCase()) 
         capitalizeNext = false;
         e.preventDefault();
       }
@@ -87,10 +89,11 @@
 </script>
 
 
-<div class="h-full w-full" on:keyup={hotkeyHandler}>
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<div class="h-full w-full" role="application" on:keyup={hotkeyHandler}>
     <div class="h-full gap-4 grid grid-cols-2">
       <div>
-        <div class="docContainer" id="docContainer" on:keyup={change} on:beforeinput={input}>
+        <div class="docContainer" role="application" id="docContainer" on:keyup={change} on:beforeinput={input}>
           <textarea id="doc" rows=4 bind:value={text}/>
         </div>
       </div>

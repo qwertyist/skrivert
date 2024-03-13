@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { db } from "../../db.ts";
+  import { db } from "../../db";
   import * as Form from "$lib/components/ui/form"
   import { Input } from "$lib/components/ui/input"
   import { addShortformSchema, type AddShortformSchema } from "./schema"
