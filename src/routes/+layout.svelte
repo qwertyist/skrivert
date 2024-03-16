@@ -4,13 +4,13 @@
   import "../app.postcss";
   import { Button } from "$lib/components/ui/button";
   onMount(() => {
-    document.addEventListener('visibilitychange', function() {
+    document.addEventListener("visibilitychange", function () {
       if (document.hidden) {
-        console.log('User opened another tab');
+        console.log("User opened another tab");
       } else {
-        console.log('User is on this tab');
+        console.log("User is on this tab");
       }
-    })
+    });
   });
 </script>
 
@@ -28,6 +28,6 @@
     </div>
   </div>
   <div class="h-full">
-      <slot />
+    <slot />
   </div>
 </div>
