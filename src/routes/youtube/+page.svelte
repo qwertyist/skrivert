@@ -3,6 +3,8 @@
     timers: false,
     sendQueue: false,
     sendInfo: false,
+    postReq: true,
+    postRes: true,
   }
   const sendTimeOffset = 0;
   import { onMount } from "svelte";
@@ -24,7 +26,9 @@
 
   function sendYoutubeCC(text) {
     const now = new Date(new Date().getTime() + sendTimeOffset).toISOString().slice(0,-1);
-    console.log(`${now}\n${text.trim()}`);
+    if(debug.postReq) {
+      console.log(`${now}\n${text.trim()}`);
+    }
     
   }
   function prepareSendCC() {
@@ -41,7 +45,7 @@
     let now = new Date();
     const words = sendQueue.shift();
     if(debug.sendInfo) {
-      console.log(`Sending:\n${interval}\n${words}`);*/
+      console.log(`Sending:\n${interval}\n${words}`);
     }
     if (words != "empty") {
       sendYoutubeCC(words)

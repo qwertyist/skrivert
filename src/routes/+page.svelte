@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { browser } from "$app/environment";
   import { parser } from "$lib/captions/main";
   import {
     getCurrentWord,
     insertExpandedPhrase,
-    insertText,
+    gnsertText,
   } from "$lib/textarea/main";
   import { cacheShortforms, expandShortform } from "../modules/shortforms";
   import { defaultExpanders } from "../modules/keyboard";
@@ -12,12 +13,27 @@
     lines: 2,
     chars: 37,
   };
-  let buffer = [{ line: 1, content: "" }];
+  let captionBuffer = [{ line: 1, content: "" }];
+  let sendBlock = { timestampe: new Date(), wordIndexes: [0] }
+  let sendQueue : Array<sendBlock> = [];
+
+  let youtubeBlocks = [];
   let textarea: any = null;
   let capitalizeNext = true;
+  let startTime = new Date();
+  let started = false;
+  let delay = 4000;
+
+  function sendYoutubeCC() {
+  }
+
   onMount(() => {
-    textarea = document.getElementById("doc");
-    textarea.focus();
+    if (browser) {
+      textarea = document.getElementById("doc");
+      textarea.focus();
+
+      setInterval(sendYoutubeCC, delay);
+    }
   });
   let text: string = "";
   let captions: string;
@@ -36,9 +52,13 @@
     });
   }
 
-  function updateBuffer() {
-    buffer[0] = { line: 0, content: text };
-    buffer.forEach((line) => {
+  function updateBuffers() {
+    if (!started) {
+      started = true;
+      startTime = new Date();
+    } 
+    captionBuffer[0] = { line: 0, content: text };
+    captionBuffer.forEach((line) => {
       renderCaptions(line.content);
     });
   }
@@ -51,13 +71,13 @@
 
   function expand(e: InputEvent) {
     const expander = e.data as string;
-    console.log("expander:", expander);
+    // console.log("expander:", expander);
     if (defaultExpanders.has(expander)) {
       const expanderRules = defaultExpanders.get(expander)!;
       currentWord = getCurrentWord(textarea).trim();
       expandedPhrase = expandShortform(shortforms, currentWord);
       if (expanderRules.fullstop) {
-        console.log("should capitalize next");
+        // console.log("should capitalize next");
         capitalizeNext = true;
       }
       if (expandedPhrase != "") {
@@ -71,6 +91,7 @@
       }
     }
   }
+
   function change() {
     if (textarea.value.length == 0) {
       capitalizeNext = true;
@@ -87,7 +108,13 @@
         e.preventDefault();
       }
       expand(e);
-      updateBuffer();
+      console.log(beforeInputEvent)
+      if (e.data == null) { return }
+      if (/[\. ,!?]/.test(e.data)) {
+        const sendblock = { timestamp: new Date() - started, wordIndexes: [-1] }
+        sendQueue.push(sendblock);
+        updateBuffers();
+      }
     }
     if (e.inputType == "insertLineBreak") {
     }
@@ -117,7 +144,7 @@
 <span class="debug">capitalize: {capitalizeNext}</span><br />
 
 <span class="debug">beforeinput: {beforeInputEvent}</span><br />
-<span class="debug">buffer: {buffer}</span><br />
+<span class="debug">youtubeBlocks: {youtubeBlocks}</span><br />
         </pre>
     </div>
   </div>

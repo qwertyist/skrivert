@@ -17,7 +17,7 @@
 <div class="h-[calc(100vh-78px)]">
   <div class="flex flex-wrap items-center justify-between mx-auto p-4">
     <div>
-      <Button href="/">Texta</Button>
+      <Button href="/youtube">Texta</Button>
       <Button href="/settings">Förkortningar</Button>
       <Button>Välja</Button>
     </div>
