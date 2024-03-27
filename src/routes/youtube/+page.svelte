@@ -10,7 +10,7 @@
     sendInfo: false,
     postReq: true,
     postRes: true,
-  }
+  };
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   let textarea: any = null;
@@ -22,7 +22,7 @@
   $: sendQueue = [];
   $: sendTimes = [];
   $: result = "";
-  $: sendTimeOffset = 0;
+  $: sendTimeOffset = -2500;
   let endpoint = "";
   let seq = 0;
   onMount(() => {
@@ -34,47 +34,46 @@
 
   async function sendYoutubeCC(text) {
     //TODO: Skicka ord för ord. Fixa POST-request
-    if(endpoint == "") return;
-    const now = new Date(new Date().getTime() + sendTimeOffset).toISOString().slice(0,-1);
-    if(debug.postReq) {
+    if (endpoint == "") return;
+    const now = new Date(new Date().getTime() + sendTimeOffset)
+      .toISOString()
+      .slice(0, -1);
+    if (debug.postReq) {
       console.log(`${now}\n${text.trim()}\n`);
     }
 
-  	const res = await fetch(endpoint+"&seq="+seq, {
+    const res = await fetch(endpoint + "&seq=" + seq, {
       mode: "no-cors",
-			method: "POST",
-			body: `${now}\n${text.trim()}\n`
-		})
-		
+      method: "POST",
+      body: `${now}\n${text.trim()}\n`,
+    });
+
     seq += 1;
-		const json = await res.json()
-		result = JSON.stringify(json)
-    
+    const json = await res.json();
+    result = JSON.stringify(json);
   }
 
   function prepareSendCC() {
-    const interval = sendTimes.shift() ;
+    const interval = sendTimes.shift();
     if (interval == undefined) {
-      if(debug.timers) {
+      if (debug.timers) {
         console.log("No send interval ⏱ - stopping");
       }
-      if(debug.sendQueue) {
+      if (debug.sendQueue) {
         console.log("sendQueue content:", sendQueue);
       }
       return;
     }
-    let now = new Date();
     const words = sendQueue.shift();
-    if(debug.sendInfo) {
+    if (debug.sendInfo) {
       console.log(`Sending:\n${interval}\n${words}`);
     }
     if (words != "empty") {
-      sendYoutubeCC(words)
+      sendYoutubeCC(words);
     }
-    setTimeout(prepareSendCC, interval)
+    setTimeout(prepareSendCC, interval);
   }
 
-  let active = false;
   const emptySendFrequency = 2500;
   let emptySendTimer = emptySendFrequency;
   let tick = 10;
@@ -92,19 +91,23 @@
       startTime = new Date();
       started = true;
       setTimeout(prepareSendCC, 5000);
-      setInterval(() => {(emptySendTimer -= tick)|| insertEmptySend()}, tick)
-      setInterval(() => {sendTimer += tick}, tick)
+      setInterval(() => {
+        (emptySendTimer -= tick) || insertEmptySend();
+      }, tick);
+      setInterval(() => {
+        sendTimer += tick;
+      }, tick);
     }
   }
-  
+
   function insertEmptySend() {
-    if(debug.timers) {
+    if (debug.timers) {
       console.log(`${emptySendFrequency}ms passed, insert empty send`);
     }
-    sendQueue.push("empty")
-    sendTimes.push(emptySendFrequency)
+    sendQueue.push("empty");
+    sendTimes.push(emptySendFrequency);
     sendTimer -= emptySendFrequency;
-    resetEmptySendTimer()
+    resetEmptySendTimer();
   }
 
   function input(e: InputEvent) {
@@ -121,33 +124,31 @@
     }
 
     if (e.inputType == "insertText") {
-
       const key = e.data || "";
       if (/[\n\.,!?]/.test(key)) {
         sendQueue.push(text.split(/[\n\.,!?]/).pop() + `${key}`);
-        sendTimes.push(sendTimer)
+        sendTimes.push(sendTimer);
+        resetSendTimer();
         resetEmptySendTimer();
       }
     }
     if (e.inputType == "insertLineBreak") {
-        let block = text.split(/[\n\.,!?]/).pop()
-        if(block != "")  {
-          sendQueue.push(block);
-          sendTimes.push(sendTimer)
-          resetSendTimer();
-          resetEmptySendTimer();
-        }
+      let block = text.split(/[\n\.,!?]/).pop();
+      if (block != "") {
+        sendQueue.push(block);
+        sendTimes.push(sendTimer);
+        resetSendTimer();
+        resetEmptySendTimer();
+      }
     }
 
-    if(debug.sendQeue) {
+    if (debug.sendQeue) {
       console.log(sendQueue);
     }
   }
-
 </script>
 
 <div>
-
   <div class="docContainer" role="application" id="docContainer">
     <textarea
       id="doc"
@@ -158,12 +159,18 @@
     />
   </div>
   <div class="settings">
-    <div class="inputs"> 
+    <div class="inputs">
       <label class="label" for="endpoint">POST Endpoint</label><br />
-      <input name="endpoint" placeholder="http://upload.youtube.com/closedcaption?sparams=..." style="width: 60%" type="text" bind:value={endpoint} />
-      <br /> 
+      <input
+        name="endpoint"
+        placeholder="http://upload.youtube.com/closedcaption?sparams=..."
+        style="width: 60%"
+        type="text"
+        bind:value={endpoint}
+      />
+      <br />
       <label class="label" for="seq">Seq #</label><br />
-      <input name="seq" type="number" min=0 bind:value={seq} />
+      <input name="seq" type="number" min="0" bind:value={seq} />
       <br />
       <label class="label" for="offset">Tidsjustering</label><br />
       <input name="offset" type="number" bind:value={sendTimeOffset} />
@@ -177,6 +184,8 @@
 inputType: {inputType}
 lastChar: {lastChar}
 emptySendTimer: {emptySendTimer}
+currentSendTimer: {sendTimer}
+lastSendTime: {sendTimes[sendTimes.length - 1]}
 result: {result}
 </pre>
   </div>
@@ -204,7 +213,7 @@ result: {result}
   .settings .label {
     margin-top: 0.3em;
   }
-  .settings .inputs { 
+  .settings .inputs {
     width: 60%;
   }
   .settings input {
