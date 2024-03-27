@@ -11,7 +11,6 @@
     postReq: true,
     postRes: true,
   }
-  const sendTimeOffset = 0;
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   let textarea: any = null;
@@ -23,6 +22,7 @@
   $: sendQueue = [];
   $: sendTimes = [];
   $: result = "";
+  $: sendTimeOffset = 0;
   let endpoint = "";
   let seq = 0;
   onMount(() => {
@@ -159,11 +159,14 @@
   </div>
   <div class="settings">
     <div class="inputs"> 
-      <label for="endpoint">POST Endpoint</label>
+      <label class="label" for="endpoint">POST Endpoint</label><br />
       <input name="endpoint" placeholder="http://upload.youtube.com/closedcaption?sparams=..." style="width: 60%" type="text" bind:value={endpoint} />
-      
-      <label for="seq">Seq #</label>
+      <br /> 
+      <label class="label" for="seq">Seq #</label><br />
       <input name="seq" type="number" min=0 bind:value={seq} />
+      <br />
+      <label class="label" for="offset">Tidsjustering</label><br />
+      <input name="offset" type="number" bind:value={sendTimeOffset} />
       <button style="padding: 0.6em; outline: 1px solid black;">Anslut</button>
     </div>
   </div>
@@ -197,6 +200,9 @@ result: {result}
     background-color: white;
     color: black;
     padding: 1em;
+  }
+  .settings .label {
+    margin-top: 0.3em;
   }
   .settings .inputs { 
     width: 60%;
