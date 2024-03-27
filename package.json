@@ -49,6 +49,7 @@
     "zod": "^3.22.4"
   },
   "dependencies": {
+    "axios": "^1.6.8",
     "bits-ui": "^0.18.3",
     "clsx": "^2.1.0",
     "dexie": "^4.0.1-beta.11",

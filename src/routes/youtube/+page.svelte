@@ -1,4 +1,9 @@
 <script lang="ts">
+  /* 
+    Referenser:
+    "Live Caption Vendor info"
+    - https://support.google.com/youtube/answer/6077032?&ref_topic=2853697 
+  */
   const debug = {
     timers: false,
     sendQueue: false,
@@ -17,6 +22,9 @@
   let lastChar = "";
   $: sendQueue = [];
   $: sendTimes = [];
+  $: result = "";
+  let endpoint = "";
+  let seq = 0;
   onMount(() => {
     if (browser) {
       textarea = document.getElementById("doc");
@@ -24,13 +32,26 @@
     }
   });
 
-  function sendYoutubeCC(text) {
+  async function sendYoutubeCC(text) {
+    //TODO: Skicka ord för ord. Fixa POST-request
+    if(endpoint == "") return;
     const now = new Date(new Date().getTime() + sendTimeOffset).toISOString().slice(0,-1);
     if(debug.postReq) {
-      console.log(`${now}\n${text.trim()}`);
+      console.log(`${now}\n${text.trim()}\n`);
     }
+
+  	const res = await fetch(endpoint+"&seq="+seq, {
+      mode: "no-cors",
+			method: "POST",
+			body: `${now}\n${text.trim()}\n`
+		})
+		
+    seq += 1;
+		const json = await res.json()
+		result = JSON.stringify(json)
     
   }
+
   function prepareSendCC() {
     const interval = sendTimes.shift() ;
     if (interval == undefined) {
@@ -130,25 +151,31 @@
   <div class="docContainer" role="application" id="docContainer">
     <textarea
       id="doc"
-      rows="4"
+      rows="5"
       on:keyup={change}
       on:beforeinput={input}
       bind:value={text}
     />
   </div>
+  <div class="settings">
+    <div class="inputs"> 
+      <label for="endpoint">POST Endpoint</label>
+      <input name="endpoint" placeholder="http://upload.youtube.com/closedcaption?sparams=..." style="width: 60%" type="text" bind:value={endpoint} />
+      
+      <label for="seq">Seq #</label>
+      <input name="seq" type="number" min=0 bind:value={seq} />
+      <button style="padding: 0.6em; outline: 1px solid black;">Anslut</button>
+    </div>
+  </div>
+  <hr style="border: 1px solid black;margin-bottom: 0.2em;" />
   <div class="debug">
     <h2>Debug</h2>
     <pre>
 inputType: {inputType}
 lastChar: {lastChar}
 emptySendTimer: {emptySendTimer}
-sendqueue: 
+result: {result}
 </pre>
-    <span>
-      {#each sendQueue as chunk, index}
-        {index} - {chunk}
-      {/each}
-    </span>
   </div>
 </div>
 
@@ -161,6 +188,22 @@ sendqueue:
     color: black;
     padding: 1em;
     resize: none;
+    outline: none;
+  }
+  .docContainer textarea:focus {
+    outline: none;
+  }
+  .settings {
+    background-color: white;
+    color: black;
+    padding: 1em;
+  }
+  .settings .inputs { 
+    width: 60%;
+  }
+  .settings input {
+    border: 1px solid black;
+    padding: 0.6em;
   }
   .debug {
     background-color: white;
