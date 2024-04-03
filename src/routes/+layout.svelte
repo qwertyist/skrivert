@@ -6,9 +6,9 @@
   onMount(() => {
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) {
-        console.log("User opened another tab");
+//        console.log("User opened another tab");
       } else {
-        console.log("User is on this tab");
+ //       console.log("User is on this tab");
       }
     });
   });
