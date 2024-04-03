@@ -9,12 +9,28 @@
 
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
+  import ListComponent from "$lib/components/shortforms/listcomponent.svelte"
   import AddShortform from "./addshortform.svelte";
   let addshortform: any;
   export let data: PageData;
   onMount(() => {
   })
 </script>
+<h4>Standardlistor</h4>
+<ListComponent name="Standardlista" type="standard" id=0 />
+<ListComponent name="Engelska" type="standard" id=2 />
+<br /> 
+<h4>Ämneslistor</h4>
+<ListComponent name="För och efterled i svenska ortsnamn" type="ämneslista" id=255 />
+<br />
+<hr />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 <AddShortform data={data.form}/>
 
 <pre>{JSON.stringify($shortforms)}</pre>
