@@ -5,7 +5,7 @@
   import {
     getCurrentWord,
     insertExpandedPhrase,
-    gnsertText,
+    insertText,
   } from "$lib/textarea/main";
   import { cacheShortforms, expandShortform } from "../modules/shortforms";
   import { defaultExpanders } from "../modules/keyboard";

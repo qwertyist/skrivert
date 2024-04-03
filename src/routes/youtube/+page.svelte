@@ -9,7 +9,7 @@
     sendQueue: false,
     sendInfo: false,
     postReq: true,
-    postRes: true,
+    postRes: false,
   };
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
@@ -32,25 +32,47 @@
     }
   });
 
-  async function sendYoutubeCC(text) {
-    //TODO: Skicka ord för ord. Fixa POST-request
-    if (endpoint == "") return;
+  const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  function createPOSTRequest(word) {
+    if (/[\s]+/.test(word)) return;
     const now = new Date(new Date().getTime() + sendTimeOffset)
       .toISOString()
       .slice(0, -1);
     if (debug.postReq) {
-      console.log(`${now}\n${text.trim()}\n`);
+      console.log(`${now}\n${word.trim()}\n`);
     }
-
-    const res = await fetch(endpoint + "&seq=" + seq, {
+    fetch(endpoint + "&seq=" + seq, {
       mode: "no-cors",
       method: "POST",
-      body: `${now}\n${text.trim()}\n`,
-    });
+      body: `${now}\n${word}\n`,
+    })
+      .then(() => {
+        seq += 1;
+      })
+      .catch((err) => {
+        console.error("post to youtube failed", err);
+      });
+  }
 
+  async function sendYoutubeCC(text) {
+    //TODO: Skicka ord för ord. Fixa POST-request
+    if (endpoint == "") return;
+    const words = text.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      createPOSTRequest(words[i]);
+      const wait = Math.floor(Math.random() * (450 - 150 + 1)) + 150;
+      console.log("And wait:", wait, "ms");
+      await timer(wait);
+    }
+    /*
+    const res = fetch(endpoint + "&seq=" + seq, {
+      mode: "no-cors",
+      method: "POST",
+      body: `${now}\n${text}\n`,
+    });
     seq += 1;
-    const json = await res.json();
-    result = JSON.stringify(json);
+    */
   }
 
   function prepareSendCC() {
@@ -126,7 +148,8 @@
     if (e.inputType == "insertText") {
       const key = e.data || "";
       if (/[\n\.,!?]/.test(key)) {
-        sendQueue.push(text.split(/[\n\.,!?]/).pop() + `${key}`);
+        const block = text.split(/[\n\.,!?]/).pop() + `${key}`;
+        sendQueue.push(block);
         sendTimes.push(sendTimer);
         resetSendTimer();
         resetEmptySendTimer();
@@ -134,7 +157,7 @@
     }
     if (e.inputType == "insertLineBreak") {
       let block = text.split(/[\n\.,!?]/).pop();
-      if (block != "") {
+      if (block != undefined && block != "") {
         sendQueue.push(block);
         sendTimes.push(sendTimer);
         resetSendTimer();
