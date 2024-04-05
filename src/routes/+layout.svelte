@@ -29,6 +29,10 @@
   import * as Tabs from "$lib/components/ui/tabs/index";
   import * as Tooltip from "$lib/components/ui/tooltip/index";
 
+  let sidebar = false;
+  const toggleSidebar = () => {
+    sidebar = !sidebar;
+  };
   onMount(() => {
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) {
@@ -41,67 +45,72 @@
 </script>
 
 <div class="min-h-screen w-full flex-col">
-  <header class="sticky top-0 h-16 border-b bg-background px-4 md:px-6">
-    <nav class="flex md:flex md:flex-grow flex-row space-x-1 justify-between">
-      <a href="#" class="py-4 px-2">
-        <div
-          class="grid grid-cols-2 text-slate-500 hover:text-slate-800 font-bold"
+  <div class="grid grid-cols-12">
+    <div class={sidebar ? "col-span-10" : "col-span-12"}>
+      <div class="sticky top-0 h-16 border-b bg-background px-4 md:px-6">
+        <nav
+          class="flex md:flex md:flex-grow flex-row space-x-1 justify-between"
         >
-          <Keyboard />Skrivert
-        </div>
-      </a>
-      <div class="py-4 px-2 flex">
-        <div>
-          <a
-            href="#"
-            class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2"
-            >Hem</a
-          >
-          <a
-            href="#"
-            class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2 border-slate-200"
-            >Skriv</a
-          >
-          <a
-            href="#"
-            class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2 border-slate-200"
-            >Ordlistor</a
-          >
-          <a
-            href="#"
-            class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2 border-slate-200"
-            >Inställningar</a
-          >
-        </div>
-        <div class="lg:w-80 md:w-64">
-          <a href="#" class="py-4 px-2 text-slate-500"
-            >Öppna/stäng verktygslåda</a
-          >
-        </div>
+          <a href="#" class="py-4 px-2">
+            <div
+              class="grid grid-cols-2 text-slate-500 hover:text-slate-800 font-bold"
+            >
+              <Keyboard />Skrivert
+            </div>
+          </a>
+          <div class="py-4 px-2 flex">
+            <div>
+              <a
+                href="#"
+                class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2"
+                >Hem</a
+              >
+              <a
+                href="#"
+                class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2 border-slate-200"
+                >Skriv</a
+              >
+              <a
+                href="#"
+                class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2 border-slate-200"
+                >Ordlistor</a
+              >
+              <a
+                href="#"
+                class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2 border-slate-200"
+                >Inställningar</a
+              >
+              <a
+                href="#"
+                on:click={toggleSidebar}
+                class="py-4 px-2 text-slate-500">Öppna/stäng verktygslåda</a
+              >
+            </div>
+          </div>
+        </nav>
       </div>
-    </nav>
-  </header>
-  <main
-    class="w-full lg:grid lg:min-h-[600px] lg:grid-cols-12 xl:min-h-[800px]"
-  >
-    <div class="col-span-10">
-      <slot />
+
+      <main>
+        <slot />
+      </main>
     </div>
-    <div class="border-l-2 py-2 px-2 col-span-2">
-      <div class="space-y-1">
-        <h4 class="text-xl font-medium leading-none">Verktygslåda</h4>
-        <p class="text-md text-muted-foreground">
-          Manipulera verkligheten och bokstäverna med olika tillhyggen
-        </p>
-      </div>
-      <Separator class="my-4" />
-      <div class="flex items-center space-x-4">
-        <Skeleton class="h-12 w-12 rounded-full" />
-        <div class="space-y-2">
-          <Skeleton class="h-4 w-[150px]" />
-          <Skeleton class="h-4 w-[100px]" />
+    <div class={"col-span-2 " + (sidebar ? "": "hidden")}>
+      <div class="border-l-2 py-2 px-2">
+        <div class="space-y-1">
+          <h4 class="text-xl font-medium leading-none">Verktygslåda</h4>
+          <p class="text-md text-muted-foreground">
+            Manipulera verkligheten och bokstäverna med olika tillhyggen
+          </p>
+        </div>
+        <Separator class="my-4" />
+        <div class="flex items-center space-x-4">
+          <Skeleton class="h-12 w-12 rounded-full" />
+          <div class="space-y-2">
+            <Skeleton class="h-4 w-[150px]" />
+            <Skeleton class="h-4 w-[100px]" />
+          </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </div>
