@@ -34,6 +34,7 @@
 
   let n = 0;
   let sidebar = false;
+  let selectedMenuItem = 0;
   const closeSidebar = () => {
     sidebar = false;
   };
@@ -44,6 +45,20 @@
   };
   onMount(() => {
     document.addEventListener("keydown", (event) => {
+      if (event.code == "ArrowUp") {
+        event.preventDefault();
+        if (selectedMenuItem == 0) { selectedMenuItem = 6
+        } else {
+          selectedMenuItem--;
+        }
+      }
+      if (event.code == "ArrowDown") {
+        event.preventDefault();
+        if (selectedMenuItem == 6) { selectedMenuItem = 0
+        } else {
+          selectedMenuItem++;
+        }
+      }
       if (event.code == "F7") {
         event.preventDefault();
         toggleSidebar();
@@ -129,7 +144,50 @@
           </p>
         </div>
         <Separator class="my-4" />
-        {#if n == 4}
+        {#if n == 1}
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 0 ? "border-2 border-cyan-200" : "")}
+          >
+            Lägg till förkortning
+          </div>
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 1 ? "border-2 border-cyan-200" : "")}
+          >
+            Session
+          </div>
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 2 ? "border-2 border-cyan-200" : "")}
+          >
+            Chatt
+          </div>
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 3 ? "border-2 border-cyan-200" : "")}
+          >
+            Manuskript
+          </div>
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 4 ? "border-2 border-cyan-200" : "")}
+          >
+            Ordlistor
+          </div>
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 5 ? "border-2 border-cyan-200" : "")}
+          >
+            Händelser
+          </div>
+          <div
+            class={"rounded-md border-2 px-4 py-3 font-mono text-sm" +
+              (selectedMenuItem == 6 ? "border-2 border-cyan-200" : "border-2")}
+          >
+            Undertext
+          </div>
+        {:else if n == 4}
           <iframe
             width="346"
             height="315"
