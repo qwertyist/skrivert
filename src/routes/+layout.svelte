@@ -36,6 +36,12 @@
     sidebar = !sidebar;
   };
   onMount(() => {
+    document.addEventListener("keydown", (event) => {
+      if (event.code == "F7") {
+        event.preventDefault();
+        toggleSidebar();
+      }
+    });
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) {
         //        console.log("User opened another tab");
@@ -46,9 +52,9 @@
   });
 </script>
 
-<div class="h-full w-full flex-col">
-  <div class="h-full grid grid-cols-12">
-    <div class={sidebar ? "col-span-10" : "col-span-12"}>
+<div class="h-full w-full">
+  <div class="w-full h-full flex flex-row">
+    <div class="w-full flex flex-col">
       <div class="sticky top-0 h-16 border-b bg-background px-4 md:px-6">
         <nav
           class="flex md:flex md:flex-grow flex-row space-x-1 justify-between"
@@ -60,7 +66,7 @@
               <Keyboard />Skrivert
             </div>
           </a>
-          <div>
+          <div class="max-w-42">
             <div class="grid-cols-5 grid auto-cols-auto justify-center">
               <a
                 href="#"
@@ -89,7 +95,7 @@
               >
                 <span class="flex justify-between">
                   {#if !sidebar}Öppna verktygslåda&nbsp;<PanelRightOpen />
-                  {:else}Stäng verktylgslåda&nbsp;<PanelRightClose />{/if}
+                  {:else}Stäng verktygslåda&nbsp;<PanelRightClose />{/if}
                 </span>
               </a>
             </div>
@@ -101,7 +107,7 @@
         <slot />
       </main>
     </div>
-    <div class={"col-span-2 " + (sidebar ? "" : "hidden")}>
+    <div class={sidebar ? "" : "hidden"}>
       <div class="h-full border-l-2 py-2 px-2">
         <div class="space-y-1">
           <h4 class="text-xl font-medium leading-none">Verktygslåda</h4>
