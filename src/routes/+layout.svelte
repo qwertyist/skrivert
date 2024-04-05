@@ -12,6 +12,8 @@
   import Search from "lucide-svelte/icons/search";
   import Users from "lucide-svelte/icons/users";
 
+  import PanelRightClose from "lucide-svelte/icons/panel-right-close";
+  import PanelRightOpen from "lucide-svelte/icons/panel-right-open";
   import Keyboard from "svelte-radix/Keyboard.svelte";
 
   import { Badge } from "$lib/components/ui/badge/index";
@@ -44,8 +46,8 @@
   });
 </script>
 
-<div class="min-h-screen w-full flex-col">
-  <div class="grid grid-cols-12">
+<div class="h-full w-full flex-col">
+  <div class="h-full grid grid-cols-12">
     <div class={sidebar ? "col-span-10" : "col-span-12"}>
       <div class="sticky top-0 h-16 border-b bg-background px-4 md:px-6">
         <nav
@@ -58,8 +60,8 @@
               <Keyboard />Skrivert
             </div>
           </a>
-          <div class="py-4 px-2 flex">
-            <div>
+          <div>
+            <div class="grid-cols-5 grid auto-cols-auto justify-center">
               <a
                 href="#"
                 class="py-4 px-2 text-slate-500 hover:text-slate-800 border-r-2"
@@ -83,8 +85,13 @@
               <a
                 href="#"
                 on:click={toggleSidebar}
-                class="py-4 px-2 text-slate-500">Öppna/stäng verktygslåda</a
+                class="py-4 px-2 text-slate-500"
               >
+                <span class="flex justify-between">
+                  {#if !sidebar}Öppna verktygslåda&nbsp;<PanelRightOpen />
+                  {:else}Stäng verktylgslåda&nbsp;<PanelRightClose />{/if}
+                </span>
+              </a>
             </div>
           </div>
         </nav>
@@ -94,8 +101,8 @@
         <slot />
       </main>
     </div>
-    <div class={"col-span-2 " + (sidebar ? "": "hidden")}>
-      <div class="border-l-2 py-2 px-2">
+    <div class={"col-span-2 " + (sidebar ? "" : "hidden")}>
+      <div class="h-full border-l-2 py-2 px-2">
         <div class="space-y-1">
           <h4 class="text-xl font-medium leading-none">Verktygslåda</h4>
           <p class="text-md text-muted-foreground">
