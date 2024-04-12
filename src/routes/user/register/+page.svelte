@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { currentUser, pb } from "$lib/pocketbase";
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
@@ -41,6 +42,7 @@
         .collection("users")
         .create({ username, password, passwordConfirm, email });
       console.log("successfully created user:", createdUser);
+      goto("/");
     } catch (err) {
       submitting = false;
       console.error("Signup failed:", err);
