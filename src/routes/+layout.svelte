@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { currentUser } from "$lib/pocketbase";
   import { onMount } from "svelte";
   import "../app.pcss";
   import "../app.postcss";
@@ -21,6 +22,7 @@
       <Button href="/settings">Förkortningar</Button>
       <Button>Välja</Button>
     </div>
+    <div>{#if $currentUser}Inloggad som: <b>{$currentUser.username}</b>{:else}Ej inloggad (<a href="/user/login/">Logga in</a>){/if}</div>
     <div>
       <Button>Skapa</Button>
       <Button>Dela</Button>

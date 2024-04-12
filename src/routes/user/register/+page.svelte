@@ -101,7 +101,7 @@
   {#if submitting}
     <Progress {progress} max={100} class="w-72" />
   {:else}
-    <Form.Button>Submit</Form.Button>
+    <Form.Button>Registrera</Form.Button>
   {/if}
 </form>
 <!--<SuperDebug data={$formData} />-->
