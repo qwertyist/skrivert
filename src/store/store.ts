@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import type { textSettingsType } from "../global.d.ts";
+import { textSettingsType } from "../global.d.ts";
 
 const defaultTextSettings: textSettingsType = {
   font: "sans-serif",
@@ -14,3 +14,7 @@ export const textSettingsStore = writable({
 });
 
 export const sessionSettingsStore = writable();
+
+export const shortformsStore = writable();
+
+// export const documentsStore = writable();
