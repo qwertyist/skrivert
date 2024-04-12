@@ -57,7 +57,7 @@
 
 {#if failedSignup}
 <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Fel vid registrering</h3>
-<p>Det här kan bero på att användarnamnet redan är upptaget</p>
+<p>Det här kan bero på att användarnamnet är upptaget eller att e-postadressen redan används.</p>
 {/if}
 <form class="w-72" method="POST" use:enhance>
   <Form.Field {form} name="name">
