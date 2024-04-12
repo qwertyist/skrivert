@@ -108,7 +108,7 @@
         e.preventDefault();
       }
       expand(e);
-      console.log(beforeInputEvent)
+      //console.log(beforeInputEvent)
       if (e.data == null) { return }
       if (/[\. ,!?]/.test(e.data)) {
         const sendblock = { timestamp: new Date() - started, wordIndexes: [-1] }
