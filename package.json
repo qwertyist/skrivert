@@ -55,6 +55,7 @@
     "bits-ui": "^0.18.3",
     "clsx": "^2.1.0",
     "formsnap": "^0.5.1",
+    "pocketbase": "^0.21.1",
     "radix-icons-svelte": "^1.2.1",
     "tailwind-merge": "^2.2.1",
     "tailwind-variants": "^0.2.0"
