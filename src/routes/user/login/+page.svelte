@@ -38,24 +38,9 @@
         .collection("users")
         .authWithPassword(form.username, form.password);
       console.log(user);
+      goto("/");
     } catch (err) {
       console.log("failed login:", err);
-      failedLogin = true;
-    }
-  }
-  async function signUp() {
-    try {
-      const data = {
-        username,
-        password,
-        passwordConfirm: password,
-        name: username,
-      };
-      const createdUser = await pb.collection("users").create(data);
-      console.log(createdUser);
-      await login();
-    } catch (err) {
-      console.error(err);
       failedLogin = true;
     }
   }
@@ -63,7 +48,9 @@
     pb.authStore.clear();
   }
 </script>
-
+<svelte:head>
+  <title>Skrivert | Logga in</title>
+</svelte:head>
 <div class="space-y-1">
   <div>
   {#if $currentUser}

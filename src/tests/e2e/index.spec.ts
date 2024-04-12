@@ -39,3 +39,17 @@ test("register testuser1 [second]", async ({ page }) => {
   await submitButton.click();
   await expect(page.getByRole("heading", { name: "Fel vid registrering"})).toBeVisible();
 });
+
+test("login with testuser1 then logout", async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  await expect(page).toHaveTitle(/Skrivert/);
+  await page.getByRole('link', { name: 'Logga in' }).click();
+  await expect(page).toHaveTitle(/Skrivert | Logga in/);
+  await page.getByLabel('Användarnamn').click();
+  await page.getByLabel('Användarnamn').fill('testuser1');
+  await page.getByLabel('Användarnamn').press('Tab');
+  await page.getByLabel('Lösenord').fill('abcd1234');
+  await page.getByLabel('Lösenord').press('Enter');
+  await page.getByRole('button', { name: 'Logga ut' }).click();
+  await page.getByRole('link', { name: 'Logga in' }).click();
+});
