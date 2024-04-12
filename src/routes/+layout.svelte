@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { currentUser } from "$lib/pocketbase";
   import { onMount } from "svelte";
   import "../app.pcss";
   import "../app.postcss";
@@ -89,6 +90,8 @@
             </div>
           </a>
           <!-- TODO: Skapa breakpoint w < 950px -->
+
+    <div>{#if $currentUser}Inloggad som: <b>{$currentUser.username} (<a href="/user/logout">Logga ut</a>)</b>{:else}Ej inloggad (<a href="/user/login/">Logga in</a>){/if}</div>
           <div class="py-4 max-w-42">
             <div class="flex align-left">
               <div class="align-center border-r-2">
