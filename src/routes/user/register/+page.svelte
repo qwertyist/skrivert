@@ -16,6 +16,7 @@
   export let data: SuperValidated<Infer<typeof _userSchema>>;
   export let submitting = false;
   export let progress = 100;
+  export let failedSignup = false;
   const form = superForm(data, {
     SPA: true,
     validators: zodClient(_userSchema),
@@ -45,11 +46,19 @@
       goto("/");
     } catch (err) {
       submitting = false;
+      failedSignup = true;
       console.error("Signup failed:", err);
     }
   }
 </script>
+<svelte:head>
+  <title>Skrivert | Registrera konto</title>
+</svelte:head>
 
+{#if failedSignup}
+<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Fel vid registrering</h3>
+<p>Det här kan bero på att användarnamnet redan är upptaget</p>
+{/if}
 <form class="w-72" method="POST" use:enhance>
   <Form.Field {form} name="name">
     <Form.Control let:attrs>
@@ -95,6 +104,4 @@
     <Form.Button>Submit</Form.Button>
   {/if}
 </form>
-<br />
-<br />
-<SuperDebug data={$formData} />
+<!--<SuperDebug data={$formData} />-->

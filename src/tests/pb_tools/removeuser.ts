@@ -15,5 +15,10 @@ export async function removeTestUserByEmail(email: string) {
   const testuser = users.find(user => {
     return user.email == email
   })
-  await pb.collection("users").delete(testuser.id)
+  if (testuser == undefined) return
+  try {
+    await pb.collection("users").delete(testuser.id)
+  } catch(err) {
+    console.error("Couldn't remove testuser");
+  }
 }
