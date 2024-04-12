@@ -82,7 +82,7 @@
           <Form.Label>Användarnamn</Form.Label>
           <Input {...attrs} bind:value={$formData.username} />
         </Form.Control>
-        <Form.Description>Det här använder du för att logga in</Form.Description
+        <Form.Description></Form.Description
         >
         <Form.FieldErrors />
       </Form.Field>
