@@ -2,6 +2,7 @@
   import { currentUser, pb } from "$lib/pocketbase";
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
+  import { Progress } from "$lib/components/ui/progress";
   import { _userSchema } from "./+page";
   import {
     type SuperValidated,
@@ -12,14 +13,15 @@
   import SuperDebug from "sveltekit-superforms";
 
   export let data: SuperValidated<Infer<typeof _userSchema>>;
-
+  export let submitting = false;
+  export let progress = 100;
   const form = superForm(data, {
     SPA: true,
     validators: zodClient(_userSchema),
     dataType: "json",
     onUpdate({ form }) {
       if (form.valid) {
-      signUp(form.data)
+        signUp(form.data);
       }
     },
   });
@@ -27,11 +29,20 @@
   const { form: formData, enhance } = form;
   async function signUp(userData) {
     try {
-    const { name:username , password, confirmPassword:passwordConfirm, email } = userData;
-    console.log("Sign up with:", userData)
-    const createdUser = await pb.collection('users').create({username, password, passwordConfirm, email});
-    await login();
+      submitting = true;
+      const {
+        name: username,
+        password,
+        confirmPassword: passwordConfirm,
+        email,
+      } = userData;
+      console.log("Sign up with:", userData);
+      const createdUser = await pb
+        .collection("users")
+        .create({ username, password, passwordConfirm, email });
+      console.log("successfully created user:", createdUser);
     } catch (err) {
+      submitting = false;
       console.error("Signup failed:", err);
     }
   }
@@ -76,6 +87,12 @@
     <Form.Description></Form.Description>
     <Form.FieldErrors />
   </Form.Field>
-  <Form.Button>Submit</Form.Button>
+  {#if submitting}
+    <Progress {progress} max={100} class="w-72" />
+  {:else}
+    <Form.Button>Submit</Form.Button>
+  {/if}
 </form>
+<br />
+<br />
 <SuperDebug data={$formData} />
