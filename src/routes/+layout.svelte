@@ -133,7 +133,7 @@
         </nav>
       </div>
 
-      <main>
+      <main class="grid justify-items-center">
         <slot />
       </main>
     </div>
