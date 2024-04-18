@@ -17,22 +17,35 @@
   let result;
   export let data: SuperValidated<Infer<AddShortformSchema>>;
   export let status = "";
-  export let existing = "";
+  export let existing = { id: null, message: "" };
   const form = superForm(data, {
     validators: zodClient(addShortformSchema),
     async onChange() {
-      const exists = await checkForExistingShortform($formData.shortform) 
-      existing = exists ? `${$formData.shortform} existerar som ${exists}` : ""
-      },
+      const exists = await checkForExistingShortform($formData.shortform);
+      existing = exists
+        ? {
+            id: exists.id,
+            message: `${$formData.shortform} existerar som ${exists.phrase}`,
+          }
+        : { id: null, message: "" };
+    },
     async onUpdate({ form }) {
       result = form;
+      console.log(result);
       if (form.posted) {
         try {
-          const record = await db.shortforms.add({
-            shortform: result.data.shortform,
-            phrase: result.data.phrase,
-            used: new Date(0),
-          });
+          if (!existing.id) {
+            const record = await db.shortforms.add({
+              shortform: result.data.shortform,
+              phrase: result.data.phrase,
+              used: new Date(0),
+            });
+          } else {
+            await db.shortforms.update(existing.id, {
+              phrase: result.data.phrase,
+              used: new Date(0),
+            });
+          }
         } catch (err) {
           status = err;
         }
@@ -49,7 +62,7 @@
     <Form.Control let:attrs>
       <Form.Label>Förkortning</Form.Label>
       <Input {...attrs} bind:value={$formData.shortform} />
-      <Form.Description>{existing}</Form.Description>
+      <Form.Description>{existing.message}</Form.Description>
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>

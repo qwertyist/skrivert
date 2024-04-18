@@ -8,7 +8,7 @@ export const checkForExistingShortform = async (shortform) => {
       .where({ shortform: shortform })
       .first();
     if (existing) {
-      return existing.phrase;
+      return existing;
     }
     return null;
   } catch (err) {
