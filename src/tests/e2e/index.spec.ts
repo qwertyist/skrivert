@@ -4,7 +4,7 @@ test("has title Skrivert", async ({ page }) => {
   await page.goto("http://localhost:5173/");
   await expect(page).toHaveTitle(/Skrivert/);
 });
-/*
+
 test("register testuser1 [first]", async ({ page }) => {
   await removeTestUserByEmail("test1@qwertyist.se")
   await page.goto("http://localhost:5173/user/register");
@@ -54,7 +54,6 @@ test("login with testuser1 then logout", async ({ page }) => {
   await page.getByRole('link', { name: 'Logga in' }).click();
 });
 
-*/
 test("login with testuser1 then write sample text", async ({ page }) => {
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Logga in" }).click();
