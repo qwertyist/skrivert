@@ -6,7 +6,7 @@ test("has title Skrivert", async ({ page }) => {
 });
 
 test("register testuser1 [first]", async ({ page }) => {
-  await removeTestUserByEmail("test1@qwertyist.se")
+  await removeTestUserByEmail("test1@qwertyist.se");
   await page.goto("http://localhost:5173/user/register");
   await expect(page).toHaveTitle(/Skrivert | Registrera konto/);
   await page.getByLabel("Användarnamn").click();
@@ -37,21 +37,23 @@ test("register testuser1 [second]", async ({ page }) => {
   await page.getByLabel("Bekräfta lösenord").press("Tab");
   const submitButton = page.locator("button[type='submit']");
   await submitButton.click();
-  await expect(page.getByRole("heading", { name: "Fel vid registrering"})).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Fel vid registrering" }),
+  ).toBeVisible();
 });
 
 test("login with testuser1 then logout", async ({ page }) => {
-  await page.goto('http://localhost:5173/');
+  await page.goto("http://localhost:5173/");
   await expect(page).toHaveTitle(/Skrivert/);
-  await page.getByRole('link', { name: 'Logga in' }).click();
+  await page.getByRole("link", { name: "Logga in" }).click();
   await expect(page).toHaveTitle(/Skrivert | Logga in/);
-  await page.getByLabel('Användarnamn').click();
-  await page.getByLabel('Användarnamn').fill('testuser1');
-  await page.getByLabel('Användarnamn').press('Tab');
-  await page.getByLabel('Lösenord').fill('abcd1234');
-  await page.getByLabel('Lösenord').press('Enter');
-  await page.getByRole('button', { name: 'Logga ut' }).click();
-  await page.getByRole('link', { name: 'Logga in' }).click();
+  await page.getByLabel("Användarnamn").click();
+  await page.getByLabel("Användarnamn").fill("testuser1");
+  await page.getByLabel("Användarnamn").press("Tab");
+  await page.getByLabel("Lösenord").fill("abcd1234");
+  await page.getByLabel("Lösenord").press("Enter");
+  await page.getByRole("button", { name: "Logga ut" }).click();
+  await page.getByRole("link", { name: "Logga in" }).click();
 });
 
 test("login with testuser1 then write sample text", async ({ page }) => {
@@ -74,7 +76,7 @@ test("login with testuser1 then write sample text", async ({ page }) => {
   await page.keyboard.type("uppdrag.");
   await page.keyboard.press("Space");
   const subtitle = page.getByRole("textbox").nth(1);
- expect(await subtitle.inputValue()).toBe(
+  expect(await subtitle.inputValue()).toBe(
     "Jag testar att skriva några\nförkortningar. Det är ganska coolt-\n\n-och ett ärofyllt utvecklingsuppdrag.\n\n",
   );
 });

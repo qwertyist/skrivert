@@ -11,17 +11,28 @@ try {
 } catch (err) {
   console.error("pb: Failed auth as admin:", err);
 }
-  console.log("Populate shortforms to [SE] baselist -", process.env.PUBLIC_SE_BASELIST);
+console.log(
+  "Populate shortforms to [SE] baselist -",
+  process.env.PUBLIC_SE_BASELIST,
+);
 
-  default_shortforms.forEach(async(sf) => {
-    const data = {
-      shortform: sf.sf,
-      phrase: sf.p,
-      list: process.env.PUBLIC_SE_BASELIST,
-    }
+default_shortforms.forEach(async (sf) => {
+  const data = {
+    shortform: sf.sf,
+    phrase: sf.p,
+    list: process.env.PUBLIC_SE_BASELIST,
+  };
   try {
-      const record = await pb.collection('shortforms').create(data, { requestKey: null });
-    } catch(err) {
-      console.error("failed creating shortform", JSON.stringify(data), "err: ", err)
-    }
-  });
+    //requestKey: null behövs för att skapa en serie av med samma request-typ (t.ex. "create")
+    const record = await pb
+      .collection("shortforms")
+      .create(data, { requestKey: null });
+  } catch (err) {
+    console.error(
+      "failed creating shortform",
+      JSON.stringify(data),
+      "err: ",
+      err,
+    );
+  }
+});

@@ -11,14 +11,14 @@ try {
 }
 
 export async function removeTestUserByEmail(email: string) {
-  const users = await pb.collection("users").getFullList()
-  const testuser = users.find(user => {
-    return user.email == email
-  })
-  if (testuser == undefined) return
+  const users = await pb.collection("users").getFullList();
+  const testuser = users.find((user) => {
+    return user.email == email;
+  });
+  if (testuser == undefined) return;
   try {
-    await pb.collection("users").delete(testuser.id)
-  } catch(err) {
+    await pb.collection("users").delete(testuser.id);
+  } catch (err) {
     console.error("Couldn't remove testuser");
   }
 }
