@@ -11,3 +11,7 @@ ett verktyg för att producera undertexter och dylikt i realtid
 - ska möjliggöra för användaren att konfigurera beteende, kortkommandon, utseende mm
 - ska eftersträva att följa OWASPs standard för säker utveckling och ta hänsyn till gällande lagstiftning för sekretess och personuppgiftshantering
 - ska eftersträva att följa WCAG 2 och gällande svenska regler och riktlinjer för webbtillgänglighet
+
+## .env-variabler
+
+- PUBLIC_SE_BASELIST={id från svensk baslista i pocketbase}
