@@ -1,4 +1,20 @@
 import { z } from "zod";
+import { db } from "../../db";
+
+export const checkForExistingShortform = async (shortform) => {
+  console.log("check for:", shortform);
+  try {
+    const existing = await db.shortforms
+      .where({ shortform: shortform })
+      .first();
+    if (existing) {
+      return existing.phrase;
+    }
+    return null;
+  } catch (err) {
+    console.error("checkForExistingShortform failed:", err);
+  }
+};
 
 export const addShortformSchema = z.object({
   shortform: z

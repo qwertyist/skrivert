@@ -17,36 +17,17 @@
   onMount(() => {
   })
 </script>
+
+<AddShortform data={data.form}/>
+
+  {#if $shortforms}
+    {#each $shortforms as shortform (shortform.id)}
+      <ShortformComponent sf="{shortform.shortform}" p="{shortform.phrase}"/>
+    {/each}
+  {/if}
 <h4>Standardlistor</h4>
 <ListComponent name="Standardlista" type="standard" id=0 />
 <ListComponent name="Engelska" type="standard" id=2 />
 <br /> 
 <h4>Ämneslistor</h4>
 <ListComponent name="För och efterled i svenska ortsnamn" type="ämneslista" id=255 />
-<br />
-<hr />
-<br />
-<ShortformComponent sf="ab" p="aktiebolag"/>
-<ShortformComponent sf="ahet" p="allmänhet"/>
-<ShortformComponent sf="aå" p="alltså"/>
-<ShortformComponent sf="itne" p="inte"/>
-<ShortformComponent sf="l1p" p="/läser första punkten"/>
-<ShortformComponent sf="l2p" p="/läser andra punkten" />
-<ShortformComponent sf="lp1" p="/läser punkt 1/" />
-<ShortformComponent sf="smsm" p="så mycket som möjligt"/>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<AddShortform data={data.form}/>
-
-<pre>{JSON.stringify($shortforms)}</pre>
-<ul>
-  {#if $shortforms}
-    {#each $shortforms as shortform (shortform.id)}
-      <li>{shortform.shortform} {shortform.phrase}</li>
-    {/each}
-  {/if}
-</ul>
