@@ -9,12 +9,13 @@ export interface Shortform {
 export class Database extends Dexie {
   // 'friends' is added by dexie when declaring the stores()
   // We just tell the typing system this is the case
-  lists!: Map<String, Array<Shortform>>;
+  lists!: Map<string, Array<Shortform>>;
 
   constructor() {
     super("skrivert-db");
     this.version(1).stores({
-      lists: "++id, shortforms", // Primary key and indexed props
+      lists: "++id, &name, &pb_id, type", // Primary key and indexed props
+      shortforms: "++id, &sf, phrase, list",
     });
   }
 }

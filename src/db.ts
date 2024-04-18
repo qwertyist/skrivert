@@ -12,7 +12,7 @@ export class SkrivertDB extends Dexie {
   constructor() {
     super("skrivertdb");
     this.version(1).stores({
-      shortforms: "++id, shortform, phrase, used",
+      shortforms: "++id, &shortform, phrase, used",
     });
   }
 }
