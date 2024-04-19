@@ -14,8 +14,9 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test:integration": "playwright test",
-    "test:unit": "vitest",
-    "test:unit:coverage": "vitest run --coverage",
+    "test:bench": "vitest bench --dir ./tests/unit/",
+    "test:unit": "vitest --dir ./tests/unit/",
+    "test:unit:coverage": "vitest run --dir ./tests/unit/ --coverage",
     "populate": "node bootstrap/populate.js"
   },
   "devDependencies": {
