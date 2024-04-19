@@ -25,9 +25,22 @@ try {
 */
 
 describe("merge lists", () => {
-const left = default_shortforms.slice(0,Math.ceil(default_shortforms.length/ 2))
-  const right = default_shortforms.slice(Math.ceil(default_shortforms.length / 2), default_shortforms.length );
-  bench("merge two lists with "+ left.length+ " + " + right.length + " shortforms with no conflicts", () => {
-    merge(left,right)
-  })
-})
+  const left = default_shortforms.slice(
+    0,
+    Math.ceil(default_shortforms.length / 2),
+  );
+  const right = default_shortforms.slice(
+    Math.ceil(default_shortforms.length / 2),
+    default_shortforms.length,
+  );
+  bench(
+    "merge two lists with " +
+      left.length +
+      " + " +
+      right.length +
+      " shortforms with no conflicts",
+    () => {
+      merge(left, right);
+    },
+  );
+});

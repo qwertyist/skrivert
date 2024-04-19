@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import { merge } from "$lib/shortforms/main";
 // import default_shortforms from "../../src/data/shortforms.se.json";
 
-
 describe("merge shortforms 1", () => {
   const list1 = [
     { sf: "abb", p: "abbreviation", u: null },
@@ -24,4 +23,3 @@ describe("merge shortforms 1", () => {
     expect(merge(list1, list2)).toStrictEqual({ merged, conflicts });
   });
 });
-
