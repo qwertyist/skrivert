@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentUser } from "$lib/pocketbase";
+  import { pb, currentUser } from "$lib/pocketbase";
   import { onMount } from "svelte";
   import "../app.pcss";
   import "../app.postcss";
@@ -17,6 +17,7 @@
   import PanelRightClose from "lucide-svelte/icons/panel-right-close";
   import PanelRightOpen from "lucide-svelte/icons/panel-right-open";
   import Keyboard from "svelte-radix/Keyboard.svelte";
+  import PocketBase from "pocketbase";
 
   import { Badge } from "$lib/components/ui/badge/index";
   import * as Breadcrumb from "$lib/components/ui/breadcrumb/index";
@@ -48,14 +49,16 @@
     document.addEventListener("keydown", (event) => {
       if (event.code == "ArrowUp") {
         event.preventDefault();
-        if (selectedMenuItem == 0) { selectedMenuItem = 6
+        if (selectedMenuItem == 0) {
+          selectedMenuItem = 6;
         } else {
           selectedMenuItem--;
         }
       }
       if (event.code == "ArrowDown") {
         event.preventDefault();
-        if (selectedMenuItem == 6) { selectedMenuItem = 0
+        if (selectedMenuItem == 6) {
+          selectedMenuItem = 0;
         } else {
           selectedMenuItem++;
         }
@@ -67,13 +70,43 @@
     });
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) {
-        //        console.log("User opened another tab");
+        console.log("User opened another tab");
       } else {
-        //       console.log("User is on this tab");
+        console.log("User is on this tab");
       }
     });
   });
+
+  async function beforeUnload(event) {
+    // TODO: Hantera uppladdning av användardata när webbläsaren/fliken stängs
+    // Ska den ladda upp allt?
+    // Ska den ladda upp "pending updates"? Dvs state håller koll på vad som ändrats sen senaste backup
+    // Men testa något annat så länge:
+    // GÖR BARA EN UPPLADDNING OM ANVÄNDAREN FAKTISKT GJORT ÄNDRINGAR
+    // if(databas har ändringar som inte ldattas upp) {
+    /* 
+    event.preventDefault();
+    console.log("before unload v0");
+    const data = {
+      data: "test",
+    };
+
+    try {
+      const record = await pb.collection("dump").create(data);
+      console.log(`Sparade ${JSON.stringify(data)}\n${record}`);
+    } catch (err) {
+      console.error(
+        "[beforeUnload] couldn't upload dump data:\n",
+        JSON.stringify(err),
+      );
+    }
+    event.returnValue = true;
+    return "...";
+      */
+  }
 </script>
+
+<svelte:window on:beforeunload={beforeUnload} />
 
 <div class="h-full w-full">
   <div class="w-full h-full flex flex-row">
@@ -91,7 +124,12 @@
           </a>
           <!-- TODO: Skapa breakpoint w < 950px -->
 
-    <div>{#if $currentUser}Inloggad som: <b>{$currentUser.username} (<a href="/user/logout">Logga ut</a>)</b>{:else}Ej inloggad (<a href="/user/login/">Logga in</a>){/if}</div>
+          <div>
+            {#if $currentUser}Inloggad som: <b
+                >{$currentUser.username} (<a href="/user/logout">Logga ut</a
+                >)</b
+              >{:else}Ej inloggad (<a href="/user/login/">Logga in</a>){/if}
+          </div>
           <div class="py-4 max-w-42">
             <div class="flex align-left">
               <div class="align-center border-r-2">

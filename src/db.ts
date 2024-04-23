@@ -16,6 +16,7 @@ export class SkrivertDB extends Dexie {
       baseShortforms: "++id, shortform, phrase, list",
     });
     this.on("ready", (db) => {
+      console.log("Do ready")
       return db.baseShortforms.count(async (count) => {
         if (count > 0) {
           console.log("baseShortforms already populated");
@@ -37,7 +38,10 @@ export class SkrivertDB extends Dexie {
               sort: "-created",
             });
           } catch (err) {
-            console.error("[dexie][populate] couldn't retreive base shortforms", err);
+            console.error(
+              "[dexie][populate] couldn't retreive base shortforms",
+              err,
+            );
           }
           return db.baseShortforms.bulkAdd(shortforms);
         }
