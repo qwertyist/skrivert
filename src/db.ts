@@ -12,8 +12,8 @@ export class SkrivertDB extends Dexie {
   constructor() {
     super("skrivertdb");
     this.version(1).stores({
-      shortforms: "++id, &shortform, phrase, used",
-      baseShortforms: "++id, shortform, phrase, list",
+      shortforms: "++id, [&shortform+phrase], used",
+      baseShortforms: "++id, [&shortform+phrase], list",
     });
     this.on("ready", (db) => {
       console.log("Do ready")
