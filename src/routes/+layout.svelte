@@ -1,38 +1,18 @@
 <script lang="ts">
+  import { db } from "../db";
+  import { liveQuery } from "dexie";
+
   import { pb, currentUser } from "$lib/pocketbase";
   import { onMount } from "svelte";
   import "../app.pcss";
   import "../app.postcss";
-  import Activity from "lucide-svelte/icons/activity";
-  import ArrowUpRight from "lucide-svelte/icons/arrow-up-right";
-  import CircleUser from "lucide-svelte/icons/circle-user";
-  import CreditCard from "lucide-svelte/icons/credit-card";
-  import DollarSign from "lucide-svelte/icons/dollar-sign";
-  import Menu from "lucide-svelte/icons/menu";
-  import Package2 from "lucide-svelte/icons/package-2";
-  import Search from "lucide-svelte/icons/search";
-  import Users from "lucide-svelte/icons/users";
-
   import X from "lucide-svelte/icons/x";
   import PanelRightClose from "lucide-svelte/icons/panel-right-close";
   import PanelRightOpen from "lucide-svelte/icons/panel-right-open";
   import Keyboard from "svelte-radix/Keyboard.svelte";
-  import PocketBase from "pocketbase";
 
-  import { Badge } from "$lib/components/ui/badge/index";
-  import * as Breadcrumb from "$lib/components/ui/breadcrumb/index";
-  import { Button } from "$lib/components/ui/button/index";
-  import * as Card from "$lib/components/ui/card/index";
-  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index";
-  import { Input } from "$lib/components/ui/input/index";
-  import * as Pagination from "$lib/components/ui/pagination/index";
-  import { Progress } from "$lib/components/ui/progress/index";
   import { Separator } from "$lib/components/ui/separator/index";
-  import * as Sheet from "$lib/components/ui/sheet/index";
   import { Skeleton } from "$lib/components/ui/skeleton/index";
-  import * as Table from "$lib/components/ui/table/index";
-  import * as Tabs from "$lib/components/ui/tabs/index";
-  import * as Tooltip from "$lib/components/ui/tooltip/index";
 
   let n = 0;
   let sidebar = false;
@@ -45,7 +25,16 @@
     n++;
     sidebar = !sidebar;
   };
+
+  export let data;
+  
+  $: shortforms = data.shortforms
   onMount(() => {
+    if (navigator.onLine) {
+      console.log(
+        "Online, check if there are changes to user data to be synced...",
+      );
+    }
     document.addEventListener("keydown", (event) => {
       if (event.code == "ArrowUp") {
         event.preventDefault();
@@ -115,7 +104,7 @@
         <nav
           class="flex md:flex md:flex-grow flex-row space-x-1 justify-between"
         >
-          <a href="#" class="py-4 px-2">
+          <a href="/" class="py-4 px-2">
             <div
               class="grid grid-cols-2 text-slate-500 hover:text-slate-800 font-bold"
             >
@@ -144,7 +133,7 @@
               </div>
               <div class="align-center border-r-2">
                 <a
-                  href="#"
+                  href="/settings/"
                   class="px-2 text-slate-500 hover:text-slate-800 border-slate-200"
                   >Ordlistor</a
                 >
@@ -173,6 +162,7 @@
 
       <main class="grid justify-items-center">
         <slot />
+        {JSON.stringify($shortforms)}
       </main>
     </div>
     <div class={sidebar ? "" : "hidden"}>

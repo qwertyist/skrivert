@@ -7,6 +7,11 @@ export interface Shortform {
   used: Date;
 }
 
+export class syncingShortformClass {
+  log() {
+    console.log(JSON.stringify(this));
+  }
+}
 export class SkrivertDB extends Dexie {
   shortforms!: Table<Shortform>;
   constructor() {
@@ -15,8 +20,11 @@ export class SkrivertDB extends Dexie {
       shortforms: "++id, [&shortform+phrase], used",
       baseShortforms: "++id, [&shortform+phrase], list",
     });
+
+    this.shortforms.mapToClass(syncingShortformClass);
+
     this.on("ready", (db) => {
-      console.log("Do ready")
+      console.log("Do ready");
       return db.baseShortforms.count(async (count) => {
         if (count > 0) {
           console.log("baseShortforms already populated");
