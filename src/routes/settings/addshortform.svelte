@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { PUBLIC_DUMP_LIST } from "$env/static/public"
   import { db } from "../../db";
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
+
   import {
     addShortformSchema,
     checkForExistingShortform,
@@ -33,21 +35,32 @@
       result = form;
       if (form.posted) {
         try {
+          /*
+            Use DUMP list as target during devel
+          */
+          const list = PUBLIC_DUMP_LIST;
+          console.log("PUBLIC DUMP LIST ID:", list);
+
           if (!existing.id) {
             const record = await db.createShortform({
               shortform: result.data.shortform,
               phrase: result.data.phrase,
               used: new Date(0),
+              list: list,
             });
           } else {
             await db.shortforms.update(existing.id, {
               phrase: result.data.phrase,
               used: new Date(0),
             });
-            db.shortforms.get(existing.id)
-              .then(sf => { sf.log()})
-              .catch(err => { console.error(`get shortform after update failed ${err}`)});
-
+            db.shortforms
+              .get(existing.id)
+              .then((sf) => {
+                sf.log();
+              })
+              .catch((err) => {
+                console.error(`get shortform after update failed ${err}`);
+              });
           }
         } catch (err) {
           status = err;
