@@ -61,6 +61,7 @@
     "dexie": "^4.0.1-rc.1",
     "formsnap": "^0.5.1",
     "lucide-svelte": "^0.364.0",
+    "pino": "^9.0.0",
     "pocketbase": "^0.21.1",
     "radix-icons-svelte": "^1.2.1",
     "svelte-radix": "^1.1.0",

@@ -162,7 +162,11 @@
 
       <main class="grid justify-items-center">
         <slot />
-        {JSON.stringify($shortforms)}
+        {#if $shortforms}
+          {#each $shortforms as shortform (shortform.id)}
+            sf={shortform.shortform} p={shortform.phrase}<br />
+          {/each}
+        {/if}
       </main>
     </div>
     <div class={sidebar ? "" : "hidden"}>

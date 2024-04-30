@@ -6,10 +6,9 @@ export interface Shortform {
   phrase: string;
   used: Date;
 }
-
 export class syncingShortformClass {
   log() {
-    console.log(JSON.stringify(this));
+    console.log("Log inside syncingShortformClass", JSON.stringify(this));
   }
 }
 export class SkrivertDB extends Dexie {
@@ -22,7 +21,6 @@ export class SkrivertDB extends Dexie {
     });
 
     this.shortforms.mapToClass(syncingShortformClass);
-
     this.on("ready", (db) => {
       console.log("Do ready");
       return db.baseShortforms.count(async (count) => {
@@ -55,6 +53,20 @@ export class SkrivertDB extends Dexie {
         }
       });
     });
+  }
+  createShortform(shortform: Shortform) {
+    console.log("Will I sync?", navigator.onLine);
+    if (navigator.onLine) {
+      // Perform sync to pocketbase
+    }
+    this.shortforms
+      .add(shortform)
+      .then((resp) => {
+        console.log(`dexie createShotform ${resp}`);
+      })
+      .catch((err) => {
+        console.error(`dexie createShortform failed ${err}`);
+      });
   }
 }
 

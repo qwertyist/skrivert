@@ -31,11 +31,10 @@
     },
     async onUpdate({ form }) {
       result = form;
-      console.log(result);
       if (form.posted) {
         try {
           if (!existing.id) {
-            const record = await db.shortforms.add({
+            const record = await db.createShortform({
               shortform: result.data.shortform,
               phrase: result.data.phrase,
               used: new Date(0),
@@ -45,6 +44,10 @@
               phrase: result.data.phrase,
               used: new Date(0),
             });
+            db.shortforms.get(existing.id)
+              .then(sf => { sf.log()})
+              .catch(err => { console.error(`get shortform after update failed ${err}`)});
+
           }
         } catch (err) {
           status = err;
