@@ -14,12 +14,16 @@
   import AddShortform from "./addshortform.svelte";
   let addshortform: any;
   export let data: PageData;
-  onMount(() => {});
+  let ref;
+  onMount(() => {
+    ref.focus();
+  });
 </script>
 
 <div class="w-6/12">
-  <AddShortform data={data.form} />
+  <AddShortform data={data.form} bind:ref />
 </div>
+<!--
 {#if $shortforms}
   {#each $shortforms as shortform (shortform.id)}
     <ShortformComponent sf={shortform.shortform} p={shortform.phrase} />
@@ -37,3 +41,5 @@
   id="255"
 />
 </div>
+
+  -->

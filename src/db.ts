@@ -8,6 +8,7 @@ export interface Shortform {
   list: string;
   used: Date;
   synced: boolean;
+  pbId: string; // use the pocketbase record id
 }
 export class syncingShortformClass {
   log() {
@@ -21,16 +22,87 @@ export class SkrivertDB extends Dexie {
     this.version(1).stores({
       shortforms: "++id, [&shortform+phrase], used",
       baseShortforms: "++id, [&shortform+phrase], list",
+      lists: "++id, &pbId, updated"
     });
 
     this.shortforms.mapToClass(syncingShortformClass);
     this.on("ready", (db) => {
       console.log("Do ready");
-      db.shortforms.each(shortform => {
-        if (shortform.synced) return;
-        console.log(`${shortform.shortform}=${shortform.phrase} in ${shortform.list} is not synced `)
+      db.shortforms.each((sf) => {
+        if (sf.synced) {
+          return;
+        } else {
+          if (sf.pbId == "" || sf.pbId == undefined) {
+            pb.collection("shortforms")
+              .create({
+                shortform: sf.shortform,
+                phrase: sf.phrase,
+                used: sf.used,
+                list: sf.list,
+              })
+              .then((resp) => {
+                console.log(
+                  `synced CREATE ${sf.shortform}=${sf.phrase} in ${sf.list}: ${resp.id}`,
+                );
+                db.shortforms
+                  .update(sf.id, { synced: true, pbId: resp.id })
+                  .then(() => {
+                    console.log(
+                      `marked CREATE ${sf.shortform}=${sf.phrase} in ${sf.list} as synced`,
+                    );
+                  })
+                  .catch((fail) => {
+                    console.log(
+                      `failed marking CREATE ${sf.shortform}=${sf.phrase} in ${sf.list} as synced\n${fail}`,
+                    );
+                  });
+              })
+              .catch((err) => {
+                console.log(
+                  `failed syncing CREATE ${sf.shortform}=${sf.phrase} in ${sf.list}:\n${err}`,
+                );
+              });
+          } else {
+            pb.collection("shortforms")
+              .update(sf.pbId, {
+                shortform: sf.shortform,
+                phrase: sf.phrase,
+                used: sf.used,
+                list: sf.list,
+              })
+              .then((resp) => {
+                console.log(
+                  `synced UPDATE ${sf.shortform}=${sf.phrase} in ${sf.list}: ${resp.id}`,
+                );
+                db.shortforms
+                  .update(sf.id, { synced: true, pbId: resp.id })
+                  .then(() => {
+                    console.log(
+                      `marked UPDATE ${sf.shortform}=${sf.phrase} in ${sf.list} as synced`,
+                    );
+                  })
+                  .catch((fail) => {
+                    console.log(
+                      `failed marking UPDATE ${sf.shortform}=${sf.phrase} in ${sf.list} as synced\n${fail}`,
+                    );
+                  });
+              })
+              .catch((err) => {
+                console.log(
+                  `failed syncing UPDATE ${sf.shortform}=${sf.phrase} in ${sf.list}:\n${err}`,
+                );
+              });
+          }
+        }
+      });
+      db.lists.count(async (count: number) => {
+        if (count > 0) {
+          console.log("a shortform list already exists");
+        } else {
+           
+        }
       })
-      return db.baseShortforms.count(async (count) => {
+      return db.baseShortforms.count(async (count: number) => {
         if (count > 0) {
           console.log("baseShortforms already populated");
         } else {
@@ -58,7 +130,6 @@ export class SkrivertDB extends Dexie {
           }
           return db.baseShortforms.bulkAdd(shortforms);
         }
-
       });
     });
   }
@@ -70,15 +141,18 @@ export class SkrivertDB extends Dexie {
       .then((createdId) => {
         console.log(`dexie createShotform ${createdId}`);
         pb.collection("shortforms")
-          .create({shortform: shortform.shortform, phrase: shortform.phrase, used: shortform.used, list: shortform.list})
+          .create({
+            shortform: shortform.shortform,
+            phrase: shortform.phrase,
+            used: shortform.used,
+            list: shortform.list,
+          })
           .then((resp) => {
             console.log(`synced ${shortform} to server\n${resp}`);
             this.shortforms
-              .update(createdId, { synced: true })
+              .update(createdId, { synced: true, pbId: resp.id })
               .then((resp) => {
-                console.log(
-                  `${shortform} marked as synced in dexie db ${resp}`,
-                );
+                console.log(`${shortform} marked as synced in dexie db`);
               })
               .catch((err) => {
                 console.error(

@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { PUBLIC_DUMP_LIST } from "$env/static/public"
+  import { PUBLIC_DUMP_LIST } from "$env/static/public";
   import { db } from "../../db";
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
+  import { onMount } from "svelte";
 
   import {
     addShortformSchema,
@@ -20,6 +21,7 @@
   export let data: SuperValidated<Infer<AddShortformSchema>>;
   export let status = "";
   export let existing = { id: null, message: "" };
+  export let ref = null;
   const form = superForm(data, {
     validators: zodClient(addShortformSchema),
     async onChange() {
@@ -52,15 +54,8 @@
             await db.shortforms.update(existing.id, {
               phrase: result.data.phrase,
               used: new Date(0),
+              synced: false,
             });
-            db.shortforms
-              .get(existing.id)
-              .then((sf) => {
-                sf.log();
-              })
-              .catch((err) => {
-                console.error(`get shortform after update failed ${err}`);
-              });
           }
         } catch (err) {
           status = err;
@@ -70,6 +65,9 @@
   });
 
   const { form: formData, enhance } = form;
+  onMount(() => {
+    console.log("mounted addshortform component", ref);
+  });
 </script>
 
 <SuperDebug data={$formData} />
@@ -77,7 +75,7 @@
   <Form.Field {form} name="shortform">
     <Form.Control let:attrs>
       <Form.Label>Förkortning</Form.Label>
-      <Input {...attrs} bind:value={$formData.shortform} />
+      <Input {...attrs} bind:ref bind:value={$formData.shortform} />
       <Form.Description>{existing.message}</Form.Description>
       <Form.FieldErrors />
     </Form.Control>
