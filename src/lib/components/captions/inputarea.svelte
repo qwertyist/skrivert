@@ -30,16 +30,25 @@
   });
 </script>
 
-<div on:beforeinput={input}>
+<div class="captions" on:beforeinput={input}>
   {#each { length: lines.length } as _, i}
     <InputLine
       n={i}
+      class="line"
       on:focus={focus}
       on:newline={newline}
       bind:text={lines[i]}
       bind:el={paragraphs[i]}
     />
-    <br />
+      {#if (i-1) % 2 == 0}
+        <br />
+        <br />
+      {/if}
   {/each}
-  {lines}
 </div>
+<style>
+  captions:nth-child(even) .line {
+    border: 5px solid blue;
+    bottom: 0.3em;
+  }
+</style>
