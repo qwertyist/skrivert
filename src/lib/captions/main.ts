@@ -15,10 +15,10 @@ const wrap = (s: string, w: number) =>
 
 export function parser(options: parserOptions, text: string): captionType {
   const lines = wrap(text, options.chars).split("\n");
-  var buffer = lines;
-  let blocks = [];
+  let buffer = lines;
+  const blocks = [];
 
-  let block: blockType = {
+  const block: blockType = {
     lines: [],
   };
 
