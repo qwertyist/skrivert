@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import InputLine from "$lib/components/captions/inputline.svelte";
   export let mode = "default";
-  export let cols = 42; 
+  export let cols = 42;
   let lines = [""];
   let paragraphs = [];
   let focused = 0;
@@ -25,13 +25,34 @@
     focused = e.detail;
   }
   function input(e) {
-//    console.log(`input within container ${focused}`);
+    //    console.log(`input within container ${focused}`);
   }
-  function handleTick(e) {
-    console.log(`line ${e.detail.n}: tick → ${e.detail.text}`);
+  const handleTick = async (e) => {
+    const data = {
+      session_id: "xjbups9rel7px8w",
+      author_id: "bwxjyopbf07kc31",
+      data: e.detail,
+    };
+    await pb.collection("messages").update("ec66spfzlgbtv60", data);
+  };
+  import { pb } from "$lib/pocketbase";
+  onMount(async () => {
+    pb.collection("messages")
+      .subscribe(
+        "ec66spfzlgbtv60",
+        function (e) {
+          if (mode != "interpreter") {
+            console.log(`(${e.record.session_id}) event:\n${JSON.stringify(e.record.data)}`);
+          }
+        },
+        {
+          /* other options like expand, custom headers, etc. */
+        },
+      )
+      .catch((e) => {
+        console.error(`subscribe failed: ${e}`);
+      });
 
-  }
-  onMount(() => {
     if (mode == "interpreter") {
       paragraphs[0].focus();
     }
@@ -42,9 +63,9 @@
   {#each { length: lines.length } as _, i}
     <InputLine
       n={i}
-      cols={cols}
+      {cols}
       focused={focused == i}
-      mode={mode}
+      {mode}
       on:focus={focus}
       on:newline={newline}
       on:tick={handleTick}

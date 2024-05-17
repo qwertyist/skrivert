@@ -20,7 +20,6 @@
     }
     resetEmptySendTimer();
   };
-
   onMount(() => {
     setInterval(() => {
       (emptySendTimer -= tick) || insertEmptySend();
@@ -43,13 +42,13 @@
         dispatch("tick", { n, text });
         resetEmptySendTimer();
       }
-
     });
   });
 </script>
 
 <textarea rows="1" {cols} style="resize: none" bind:this={el} bind:value={text}
-></textarea><br /> <div style="position: relative; top: 2em;">Focused: {focused}</div>
+></textarea><br />
+<div style="position: relative; top: 2em;">Focused: {focused}</div>
 <br />
 
 <style>
