@@ -43,7 +43,7 @@
         function (e) {
           if (mode != "interpreter") {
             console.log(`(${e.record.session_id}) event:\n${JSON.stringify(e.record.data)}`);
-          }
+            lines[e.record.data.n] = e.record.data.text          }
         },
         {
           /* other options like expand, custom headers, etc. */

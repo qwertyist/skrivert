@@ -8,7 +8,7 @@
   export let cols = 42;
   export let focused = false;
   const dispatch = createEventDispatcher();
-  const emptySendFrequency = 2500;
+  const emptySendFrequency = 850;
   const tick = 10;
   let emptySendTimer = emptySendFrequency;
   const resetEmptySendTimer = () => {

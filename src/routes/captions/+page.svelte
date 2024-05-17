@@ -10,7 +10,7 @@
   {n}
   <div>
     <h4>Tolk</h4>
-    <InputArea mode="interpreter" cols=80 />
+    <InputArea mode="interpreter" cols=42 />
   </div>
   <div>
     <h4>Tolkanvändare</h4>
