@@ -3,6 +3,8 @@
   import InputLine from "$lib/components/captions/inputline.svelte";
   export let mode = "default";
   export let cols = 42;
+  export let delay = 5000;
+  const queue = "9knweuancubgsu0";
   let lines = [""];
   let paragraphs = [];
   let focused = 0;
@@ -34,30 +36,52 @@
       data: e.detail,
     };
     const created = await pb.collection("messages").create(message);
-    const record = await pb.collection("queue").getOne("epk6c2j66lwjzoa");
-    const queue = {
+    const record = await pb.collection("queue").getOne(queue);
+    const updatedQueue = {
       messages: [...record.messages, created.id],
       session_id: message.session_id,
     };
-    await pb.collection("queue").update("epk6c2j66lwjzoa", queue);
+    await pb.collection("queue").update(queue, updatedQueue);
   };
-
+  const messageHandler = async (n) => {
+    await pb
+      .collection("queue")
+      .unsubscribe("*")
+      .then((data) => {
+        console.log(`Unsubscribed to queue updates: ${data}`);
+      })
+      .catch((err) => {
+        console.error(`Couldn't unsubscribe: ${err}`);
+      }); // remove all '*' topic subscriptions
+    console.log("queue updated, starting messageHandler");
+    pb.collection("queue")
+      .getOne(queue, { expand: "messages", requestKey: null })
+      .then((data) => {
+        console.log(
+          `${data.expand.messages[n].data.n}: ${data.expand.messages[n].data.text}`,
+        );
+        lines[data.expand.messages[n].data.n] =
+          data.expand.messages[n].data.text;
+        n++;
+        setTimeout(() => {
+          messageHandler(n);
+        }, data.expand.messages[n].data.delay);
+      })
+      .catch((err) => {
+        console.error(`Couldn't get message queue ${err}`);
+      });
+  };
   import { pb } from "$lib/pocketbase";
   onMount(async () => {
-    pb.collection("queue")
+    let started = false;
+    await pb
+      .collection("queue")
       .subscribe(
-        "epk6c2j66lwjzoa",
+        queue,
         function (e) {
-          if (mode != "interpreter") {
-            pb.collection("queue").getOne("epk6c2j66lwjzoa", { expand: "messages" })
-              .then((data) => {
-                console.log(`received message queue ${JSON.stringify(data.expand.messages[0])}`)
-                console.log(`${data.expand.messages[0].data.n}: ${data.expand.messages[0].data.text}`);
-                lines[data.expand.messages[0].data.n] = data.expand.messages[0].data.text;
-              })
-              .catch((err) => {
-                console.error(`Couldn't get message queue ${err}`);
-              });
+          if (mode != "interpreter" && !started) {
+            started = true;
+            messageHandler(0);
           }
         },
         {

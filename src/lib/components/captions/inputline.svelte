@@ -19,7 +19,7 @@
 
   const insertEmptySend = () => {
     if (mode == "interpreter" && focused) {
-      dispatch("tick", { n, text });
+      dispatch("tick", { n, text, delay: emptySendFrequency - emptySendTimer});
     }
     resetEmptySendTimer();
   };
@@ -43,7 +43,7 @@
         return;
       }
       if (e.key.match(/\W/)) {
-        dispatch("tick", { n, text });
+        dispatch("tick", { n, text, delay: emptySendFrequency -  emptySendTimer });
         resetEmptySendTimer();
       }
     });
@@ -52,7 +52,11 @@
 
 <textarea rows="1" {cols} style="resize: none" bind:this={el} bind:value={text}
 ></textarea><br />
-<div style="position: relative; top: 2em;">Focused: {focused}</div>
+<div style="position: relative; top: 2em;">
+  Focused: {focused}
+  <br />
+  {emptySendTimer}
+</div>
 <br />
 
 <style>
