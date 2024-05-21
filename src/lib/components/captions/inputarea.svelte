@@ -28,22 +28,32 @@
     //    console.log(`input within container ${focused}`);
   }
   const handleTick = async (e) => {
-    const data = {
+    const message = {
       session_id: "xjbups9rel7px8w",
       author_id: "bwxjyopbf07kc31",
       data: e.detail,
     };
-    await pb.collection("messages").update("ec66spfzlgbtv60", data);
+    const created = await pb.collection("messages").create(message);
+    const record = await pb.collection("queue").getOne("epk6c2j66lwjzoa");
+    const queue = {
+      messages: [...record.messages, created.id],
+      session_id: message.session_id,
+    };
+    await pb.collection("queue").update("epk6c2j66lwjzoa", queue);
   };
+
   import { pb } from "$lib/pocketbase";
   onMount(async () => {
-    pb.collection("messages")
+    pb.collection("queue")
       .subscribe(
-        "ec66spfzlgbtv60",
+        "epk6c2j66lwjzoa",
         function (e) {
           if (mode != "interpreter") {
-            console.log(`(${e.record.session_id}) event:\n${JSON.stringify(e.record.data)}`);
-            lines[e.record.data.n] = e.record.data.text          }
+            console.log(
+              `(${e.record.session_id}) event:\n${JSON.stringify(e.record.data)}`,
+            );
+            lines[e.record.data.n] = e.record.data.text;
+          }
         },
         {
           /* other options like expand, custom headers, etc. */

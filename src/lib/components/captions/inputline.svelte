@@ -10,16 +10,20 @@
   const dispatch = createEventDispatcher();
   const emptySendFrequency = 850;
   const tick = 10;
+
   let emptySendTimer = emptySendFrequency;
+
   const resetEmptySendTimer = () => {
     emptySendTimer = emptySendFrequency;
   };
+
   const insertEmptySend = () => {
     if (mode == "interpreter" && focused) {
       dispatch("tick", { n, text });
     }
     resetEmptySendTimer();
   };
+
   onMount(() => {
     setInterval(() => {
       (emptySendTimer -= tick) || insertEmptySend();
