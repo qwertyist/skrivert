@@ -16,10 +16,15 @@
       const linesLeft = lines.slice(0, focused + 1);
       const linesRight = lines.slice(focused + 1, lines.length);
       lines = [...linesLeft, "", ...linesRight];
+      handleTick({
+        n: e.detail.n - 1,
+        text: e.detail.text,
+        delay: e.detail.delay,
+      });
     }
     setTimeout(() => {
-      console.log(paragraphs[focused].value);
-      paragraphs[e.detail].focus();
+      console.log("Focus next line");
+      paragraphs[e.detail.n + 1].focus();
     }, 25);
   }
   function focus(e) {
@@ -44,16 +49,6 @@
     await pb.collection("queue").update(queue, updatedQueue);
   };
   const messageHandler = async (n) => {
-    await pb
-      .collection("queue")
-      .unsubscribe("*")
-      .then((data) => {
-        console.log(`Unsubscribed to queue updates: ${data}`);
-      })
-      .catch((err) => {
-        console.error(`Couldn't unsubscribe: ${err}`);
-      }); // remove all '*' topic subscriptions
-    console.log("queue updated, starting messageHandler");
     pb.collection("queue")
       .getOne(queue, { expand: "messages", requestKey: null })
       .then((data) => {

@@ -19,7 +19,7 @@
 
   const insertEmptySend = () => {
     if (mode == "interpreter" && focused) {
-      dispatch("tick", { n, text, delay: emptySendFrequency - emptySendTimer});
+      dispatch("tick", { n, text, delay: emptySendFrequency - emptySendTimer });
     }
     resetEmptySendTimer();
   };
@@ -34,16 +34,28 @@
     el.addEventListener("keydown", (e) => {
       //TODO: handle edge cases
       if (text.length >= cols) {
-        dispatch("newline", n + 1);
+        dispatch("newline", {
+          n,
+          text,
+          delay: emptySendFrequency - emptySendTimer,
+        });
         return;
       }
       if (e.key == "Enter") {
         e.preventDefault();
-        dispatch("newline", n + 1);
+        dispatch("newline", {
+          n,
+          text,
+          delay: emptySendFrequency - emptySendTimer,
+        });
         return;
       }
       if (e.key.match(/\W/)) {
-        dispatch("tick", { n, text, delay: emptySendFrequency -  emptySendTimer });
+        dispatch("tick", {
+          n,
+          text,
+          delay: emptySendFrequency - emptySendTimer,
+        });
         resetEmptySendTimer();
       }
     });
