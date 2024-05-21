@@ -49,10 +49,15 @@
         "epk6c2j66lwjzoa",
         function (e) {
           if (mode != "interpreter") {
-            console.log(
-              `(${e.record.session_id}) event:\n${JSON.stringify(e.record.data)}`,
-            );
-            lines[e.record.data.n] = e.record.data.text;
+            pb.collection("queue").getOne("epk6c2j66lwjzoa", { expand: "messages" })
+              .then((data) => {
+                console.log(`received message queue ${JSON.stringify(data.expand.messages[0])}`)
+                console.log(`${data.expand.messages[0].data.n}: ${data.expand.messages[0].data.text}`);
+                lines[data.expand.messages[0].data.n] = data.expand.messages[0].data.text;
+              })
+              .catch((err) => {
+                console.error(`Couldn't get message queue ${err}`);
+              });
           }
         },
         {
